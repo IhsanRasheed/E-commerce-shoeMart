@@ -63,6 +63,7 @@ router.post('/coupon_check',session.isLogin,coupon.couponCheck)
 router.get('/order',session.isLogin,order.orderPage)
 router.get('/order/cancel_orders',session.isLogin,order.orderCancel)
 router.get('/order/view_orders',session.isLogin,order.orderDetails)
+majii
 
 
 
