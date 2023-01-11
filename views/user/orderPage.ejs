@@ -1,0 +1,136 @@
+<%- include('../layouts/user-header.ejs') %>
+<div class="container table-responsive mt-5 mb-5">
+  <table class="table table-hover table-light" id="table">
+    <thead style="background-color: #414142">
+      <tr>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Order Date</th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Name</th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Payment Method
+        </th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Order Status
+        </th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Delivery Date
+        </th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Options</th>
+      </tr>
+    </thead>
+    <tbody style="background-color: #D3D3D3;">
+      <% order.forEach((order)=>{ %>
+      <tr>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <% let date = order.orderDate %> <% const format = new Date(date); %>
+          <% const todate = format.toLocaleDateString(); %> <%= todate %>
+        </td>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <%= order.name %>
+        </td>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <%= order.paymentMethod %>
+        </td>
+
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <% if(order.orderStatus === "cancelled" ){ %>
+          <span class="text-danger"> <%= order.orderStatus %> </span>
+          <% } %> <% if(order.orderStatus === "delivered" || order.orderStatus
+          === "refunded" ){ %>
+          <span class="text-success"> <%= order.orderStatus %> </span>
+          <% } %> <% if (order.orderStatus === "processing" || order.orderStatus
+          === "shipped" ){ %>
+          <span class="text-warning"> <%= order.orderStatus %> </span>
+          <% } %>
+        </td>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <% let date1 = order.deliveryDate %> <% const format1 = new Date(date1
+          ); %> <% const todate1 = format1.toLocaleDateString(); %> <%= todate1
+          %>
+        </td>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <a href="/order/view_orders?id=<%= order._id %>">
+            <button type="button" class="btn btn-outline-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="fa fa-eye"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"
+                />
+              </svg></button
+          ></a>
+          <% if (order.orderStatus === "delivered") { %>
+          <button type="button" class="btn btn-outline-none" disabled>
+            <svg
+              width="16px"
+              height="16px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#ffffff"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M1.5 12C1.5 6.20101 6.20101 1.5 12 1.5C17.799 1.5 22.5 6.20101 22.5 12C22.5 17.799 17.799 22.5 12 22.5C6.20101 22.5 1.5 17.799 1.5 12ZM15.7127 10.7197C16.0055 10.4268 16.0055 9.95192 15.7127 9.65903C15.4198 9.36614 14.9449 9.36614 14.652 9.65903L10.9397 13.3713L9.34869 11.7804C9.0558 11.4875 8.58092 11.4875 8.28803 11.7804C7.99514 12.0732 7.99514 12.5481 8.28803 12.841L10.4093 14.9623C10.7022 15.2552 11.1771 15.2552 11.47 14.9623L15.7127 10.7197Z"
+                  fill="#3f9013"
+                />
+              </g>
+            </svg>
+          </button>
+          <% } else if (order.orderStatus === "cancelled") { %>
+          <button type="button" class="btn btn-outline-none" disabled>
+            <svg
+              width="16px"
+              height="16px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#ffffff"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M1.5 12C1.5 6.20101 6.20101 1.5 12 1.5C17.799 1.5 22.5 6.20101 22.5 12C22.5 17.799 17.799 22.5 12 22.5C6.20101 22.5 1.5 17.799 1.5 12ZM9.87896 8.81803C9.58607 8.52513 9.1112 8.52513 8.8183 8.81803C8.52541 9.11092 8.52541 9.5858 8.8183 9.87869L10.9396 12L8.81831 14.1213C8.52542 14.4142 8.52542 14.8891 8.81831 15.182C9.1112 15.4749 9.58608 15.4749 9.87897 15.182L12.0003 13.0607L14.1216 15.182C14.4145 15.4749 14.8894 15.4749 15.1823 15.182C15.4752 14.8891 15.4752 14.4142 15.1823 14.1213L13.0609 12L15.1823 9.87869C15.4752 9.5858 15.4752 9.11092 15.1823 8.81803C14.8894 8.52513 14.4145 8.52513 14.1216 8.81803L12.0003 10.9394L9.87896 8.81803Z"
+                  fill="#aa3c3c"
+                />
+              </g>
+            </svg>
+          </button>
+          <% } else { %>
+          <a href="/order/cancel_orders?id=<%= order._id %>"
+            ><button type="button" class="btn btn-outline-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-x-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                />
+              </svg></button
+          ></a>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%-include('../layouts/user-footer.ejs') %>

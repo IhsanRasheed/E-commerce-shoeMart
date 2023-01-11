@@ -1,0 +1,154 @@
+<%- include('../layouts/user-header.ejs') %>
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/Public/user/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Checkout<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="checkout">
+            <div class="container">
+                <form action="/checkout"  method="post">
+                    <label for="cars" style="font-weight: bold;"> Choose Address:</label>
+                    
+                    <select id="cars" name="address" style="height: 32px;"  onchange="setaddress(this.value)">
+                        <option o value="">Choose</option>
+                        <% address.forEach((address)=>{ %>
+                      <option  value="<%=address.id%>"><%=address.name%>,<%=address.addressline1%>,<%=address.addressline2%>,<%=address.district%>,<%=address.state%>,<%=address.country%>,PIN:<%=address.pin%>,Mob:<%=address.mobile%></option>
+                   <% }) %>
+                    </select>
+            
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <h2 class="checkout-title">Or Delivery Here</h2><!-- End .checkout-title -->
+                            
+
+                                <label>Name *</label>
+                                <input name="name" type="text" class="form-control" id="adres_name" required>
+
+                                <label>Address *</label>
+                                <input name="addressline1" type="text" class="form-control" placeholder="House number and Street name" id="adres_line1" required>
+                                <input name="addressline2" type="text" class="form-control" placeholder="Appartments, suite, unit etc ..." id="adres_line2" required>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>District *</label>
+                                        <input name="district" type="text" class="form-control" id="adres_district" required>
+                                    </div><!-- End .col-sm-6 -->
+
+                                    <div class="col-sm-6">
+                                        <label>State *</label>
+                                        <input name="state" type="text" class="form-control" id="adres_state" required>
+                                    </div><!-- End .col-sm-6 -->
+                                </div><!-- End .row -->
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>Country *</label>
+                                        <input name="country" type="text" class="form-control" id="adres_country" required>
+                                    </div><!-- End .col-sm-6 -->
+
+                                    <div class="col-sm-6">
+                                        <label>Postcode / ZIP *</label>
+                                        <input name="pin" type="number" class="form-control" id="adres_pin" required>
+                                    </div><!-- End .col-sm-6 -->
+                                </div><!-- End .row -->
+
+                                <label>Mobile *</label>
+                                <input name="mobile" type="tel" class="form-control" id="adres_mobile" required>
+
+                           
+                                
+                            </div>
+                        <!-- End .col-lg-9 -->
+                        <aside class="col-lg-3">
+                         
+                            <div class="cart-discount">
+                                <span style="font-weight: bold;">Have a Coupon </span><span style="padding-left: 20px;" id="message"></span>
+                                    <div class="input-group">
+                                        
+                                        <input type="text" class="form-control"   placeholder="coupon code" id="couponCode" name="copouncode">
+                                        <input type="text" id="couponId" value="" name="couponid" hidden>
+                                        <div class="input-group-append" style="height: fit-content;">
+                                            <button class="btn btn-outline-primary-2" id="coupon_button" onclick="couponCheck(event)"><i class="icon-long-arrow-right"></i></button>
+                                            <!-- <p>fgf</p> -->
+                                        </div><!-- .End .input-group-append -->
+                                    </div><!-- End .input-group -->
+                               <!-- <p>gfg</p> -->
+                               
+                            </div><!-- End .cart-discount -->
+                            <div class="summary">
+                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                                <table class="table table-summary">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% cartItems.forEach((item)=>{ %>
+                                        <tr>
+                                            <td><%=item.name%></td>
+                                            <td>$ <%=item.total%></td>
+                                        </tr>
+                                         <% }) %>
+                                        <!-- <tr>
+                                            <td><a href="#">Blue utility pinafore denimdress</a></td>
+                                            <td>$76,00</td>
+                                        </tr> -->
+                                        <tr class="summary-subtotal">
+                                            <td>Subtotal:</td>
+                                            <td>$ <span id="subtotal"><%=subtotal%></span> </td>
+                                        </tr><!-- End .summary-subtotal -->
+                                        <tr>
+                                            <td>Shipping:</td>
+                                            <td>Free shipping</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Coupon Applied:</td>
+                                            <td><span id="coupon_code"></span></td>
+                                        </tr>
+                                        <tr class="summary-total">
+                                            <td>Total:</td>
+                                            <td>$ <span id="total"><%=subtotal%></span></td>
+                                        </tr><!-- End .summary-total -->
+                                    </tbody>
+                                </table><!-- End .table table-summary -->
+                                <input type="text" id="subtotal_amount" value="" name="subtotal" hidden>
+                               <input type="text" id="total_amount" value="" name="total" hidden>
+                                <div class="accordion-summary" id="accordion-payment">
+                                   
+                                    <input type="radio" id="html" name="payment_mode" value="COD">
+                                           <label for="html">COD</label><br>
+                                    <input type="radio" id="html" name="payment_mode" value="pay">
+                                           <label for="html">Online Payment</label><br>
+                                  
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <span class="btn-text">Place Order</span>
+                                    <span class="btn-hover-text">Proceed to Payment</span>
+                                </button>
+                            </div><!-- End .summary -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </form>
+            </div><!-- End .container -->
+        </div><!-- End .checkout -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+<%-include('../layouts/user-footer.ejs') %>

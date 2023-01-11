@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="/public/admin/adminhome/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="index.html">shoeMart Admin</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+                class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <!-- <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
+                    aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
+                        class="fas fa-search"></i></button> -->
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#!">Settings</a></li>
+                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+
+                        <a class="nav-link" href="/admin/home">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard
+                        </a>
+
+                        <a class="nav-link" href="/admin/user">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Users
+                        </a>
+
+                        <a class="nav-link" href="/admin/category">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                            Category
+                        </a>
+
+                        <a class="nav-link" href="/admin/product">
+                            <div class="sb-nav-link-icon"><i class="fa-brands fa-product-hunt"></i></div>
+                            Products
+                        </a>
+
+                        <a class="nav-link" href="/admin/product">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+                            Logout
+                        </a>
+                        
+                    </div>
+                </div>
+
+               
+
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <!-- <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol> -->
+                    
+
+                    <section>
+                        <div class="container">
+                            <div class="row mt-5">
+                                <div class="col-md-12">
+                                    <h2 class="text-center">Edit product</h2>
+                    
+                                    <form  action="/admin/product/edit" method="post" enctype="multipart/form-data">
+                                        <label for="">name</label>
+                                        <input type="text" class="form-control" name="name" value="<%=productData[0].name%>">
+                    
+                                        <!-- <div class="form-group col-md-4"> -->
+                                            <label for="inputState">Category</label>
+                                            <select id="inputState" class="form-control" name="category">
+                                            <option ><%=productData[0].catData[0].name%></option>
+                                            <% categoryData.forEach((data)=>{ %> 
+
+                                             <option><%=data.name%></option> 
+                                             <%})%>
+                                            </select>
+                                        <!-- </div>   -->
+
+                                        <label for="">Brand</label>
+                                        <input type="text" class="form-control" name="brand" value="<%=productData[0].brand%>">
+                    
+                                        <label for="">Description</label>
+                                        <input type="text" class="form-control" name="description" value="<%=productData[0].description%>">
+
+
+                                        <label for="">Stock</label>
+                                        <input type="text" class="form-control" name="stock" value="<%=productData[0].stock%>">
+                    
+                                        <label for="">price</label>
+                                        <input type="text" class="form-control" name="price" value="<%=productData[0].price%>">
+                    
+                                        <label for="">image</label>
+                                        <img src="/public/admin/assets/products/<%=productData[0].image%>" alt="" style="width: 5rem">
+                                        <input type="file" class="form-control" name="image">
+                    
+                                        <input type="submit" value="submit" class="form-control btn btn-success">
+                    
+                                    </form>
+                    
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+
+
+
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">shoeMart &copy;  Website 2022</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/admin/adminhome/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="/public/admin/adminhome/assets/demo/chart-area-demo.js"></script>
+    <script src="admin/adminhome/assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="/public/admin/adminhome/js/datatables-simple-demo.js"></script>
+</body>
+
+</html>

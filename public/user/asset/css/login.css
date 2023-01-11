@@ -1,0 +1,68 @@
+
+
+h2{
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-size: 47px !important;
+    line-height: 61px !important;
+    font-weight: 600 !important; 
+    color: #595959;      
+    padding-bottom: 20px;
+}
+
+p{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 19px;
+    line-height: 26px;
+    text-align: center;
+    color: #000000;
+}
+
+input::placeholder{
+    font-size: 14px;
+    line-height: 14px;
+    color: #999999;
+}
+
+a.text{
+    color: #BCBCBC;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+input.test{
+    
+    width: 20rem !important;
+    height: 2.5rem !important;
+}
+
+button.test{
+    font-family: 'Montserrat', sans-serif;
+    background: #000000 !important;
+    border: 1px solid #000000 !important;
+    border-radius: 3px !important;
+    height: 3rem !important;
+    width: 16rem !important;
+    padding-top: 5px;
+    font-weight: 700;
+    font-size: 21px;
+    color: white;
+}
+
+p.test{
+    font-family: 'Roboto', sans-serif;
+font-size: 12px;
+line-height: 14px;
+color: #999999;
+}
+
+a.test1{
+    font-family: 'Roboto', sans-serif;
+font-size: 12px;
+line-height: 14px;
+color: #000000;
+text-decoration: none;
+}
+

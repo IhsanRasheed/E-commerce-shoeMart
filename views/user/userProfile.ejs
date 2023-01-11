@@ -1,0 +1,261 @@
+<%- include('../layouts/user-header.ejs') %>
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/public/user/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">My Account<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Account</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-4 col-lg-3">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link " id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+                            </li> -->
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-orders-link"  href="/order"   >Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Change Password</a>
+                            </li>
+                            
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Sign Out</a>
+                            </li>
+                        </ul>
+                    </aside><!-- End .col-lg-3 -->
+
+                    <div class="col-md-8 col-lg-9">
+                        <div class="tab-content">
+                            <div class="tab-pane fade " id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
+                                <br>
+                                From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+                            </div><!-- .End .tab-pane -->
+
+                             <div  class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                               
+                            </div><!-- .End .tab-pane -->
+
+                            <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
+                                
+                                <form action="/profile-edit" method="post" >
+                                    
+                                   
+                                    <label>Current password (leave blank to leave unchanged)</label>
+                                    <input type="password" class="form-control" name="current_password" >
+
+                                    <label>New password (leave blank to leave unchanged)</label>
+                                    <input type="password" class="form-control" id="password" name="new_password" >
+
+                                    <label>Confirm new password</label>
+                                    <input type="password" class="form-control mb-2" id="confirm_password" >
+
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>SAVE CHANGES</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                </form>
+
+                            </div><!-- .End .tab-pane -->
+
+                            <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                                <p>The following addresses will be used on the checkout page by default.</p>
+
+                                <div class="row">
+
+                                    <% address.forEach((data)=>{ %>
+                                    <div class="col-lg-6">
+                                        <div class="card card-dashboard">
+                                            <div class="card-body">
+                                        <a href="/address-delete?id=<%=data.id%>" onclick="return confirm('Are you sure to delete the Address')" style="float: right;">Delete <i class="icon-delete"></i></a></p>
+                                        <h3 class="card-title">Address</h3><!-- End .card-title -->
+                                                <!-- <a href="#" style="float: right;">Edit <i class="icon-edit"></i></a></p>  -->
+                                            </p><span style="font-weight:bold">Name : </span><%=data.name%><br>
+                                            <span style="font-weight:bold">Address Line 1 : </span> <%=data.addressline1%><br>
+                                            <span style="font-weight:bold">Address Line 2 : </span><%=data.addressline2%><br>
+                                            <span style="font-weight:bold">District : </span><%=data.district%><br>
+                                            <span style="font-weight:bold">State : </span><%=data.state%><br>
+                                            <span style="font-weight:bold">Country :</span><%=data.country%><br>
+                                            <span style="font-weight:bold">Pin :</span> <%=data.pin%><br>
+                                            <span style="font-weight:bold">Mobile :</span> <%=data.mobile%><br>
+                                        <a href="/profile/address-default?id=<%=data.id%>" style="float: right;">Set as default <i class="icon-address"></i></a></p> 
+                                                <!-- <p>fdf</p> -->
+                                        <a href="/profile/address-edit?id=<%=data.id%>" sty>Edit <i class="icon-edit"></i></a></p>
+
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .card-dashboard -->
+                                    </div><!-- End .col-lg-6 -->
+
+                                    <% }) %>
+
+                                    
+                                    <div class="col-lg-6">
+                                        <div class="card card-dashboard">
+                                            <div class="card-body">
+                                                <!-- <h3 class="card-title">Add Address</h3> -->
+                                                <!-- End .card-title -->
+                                                 <!-- <p>You have not set up this type of address yet.<br>
+                                                <a href="#">Edit <i class="icon-edit"></i></a></p> -->
+
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >
+    Add Address
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Address</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        
+            <form action="/add-address" style="padding-left: 35px; padding-right: 35px;" method="post">
+                <label>Name </label>
+                <input  type="text" class="form-control"  value="" name="name" required>
+                
+
+                <label>Address Line 1 </label>
+                <input  type="text" class="form-control"  value="" name="addressline1" required>
+                <!-- <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> -->
+
+                <label>Address Line 2 </label>
+                <input  type="text" class="form-control"  value="" name="addressline2" required>
+                <label>District </label>
+                <input  type="text" class="form-control"  value="" name="district" required>
+                <label>State </label>
+                <input  type="text" class="form-control"  value="" name="state" required>
+                <label>Country </label>
+                <input  type="text" class="form-control"  value="" name="country" required>
+                <label>PIN Code </label>
+                <input  type="text" class="form-control"  value="" name="pin" required>
+                <label>Modile No. </label>
+                <input  type="text" class="form-control"  value="" name="mobile" required>
+
+                
+
+                <!-- <button type="submit" class="btn btn-outline-primary-2">
+                    <span>SAVE CHANGES</span>
+                    <i class="icon-long-arrow-right"></i>
+                </button> -->
+            
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .card-dashboard -->
+                                    </div><!-- End .col-lg-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- .End .tab-pane -->
+
+                            <div class="tab-pane fade show active" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                <div>
+                                    <!-- <p style="color: red;"><%=locals.wrong%></p>
+                                    <p style="color: green;"><%=locals.succ%></p> -->
+                                    <p style="color: red;"><%=locals.wrong%></p>
+                                    <p style="color: green;"><%=locals.succ%></p>
+                                    <label>Name </label>
+                                    <input readonly type="text" class="form-control"  value="<%=user.name%>" name="name" >
+                                    <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
+                                  
+
+                                    <label>Email </label>
+                                    <input readonly type="email" class="form-control"  value="<%=user.email%>">
+                                    <!-- <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> -->
+
+                                    <label>Mobile </label>
+                                    <input readonly type="text" class="form-control"  value="<%=user.mobile%>">
+                                     
+                            
+
+                                   
+                                </div>
+                                
+                                <div class="col-lg-6 pt-3">
+                                    <div class="card card-dashboard">
+                                        <div class="card-body">
+                                            <h3 class="card-title">Primary Address</h3><!-- End .card-title -->
+                                           <%  if(address.length!=0){ %>
+                                        </p><span style="font-weight:bold">Name : </span><%=address[0].name%><br>
+                                        <span style="font-weight:bold">Address Line 1 : </span> <%=address[0].addressline1%><br>
+                                        <span style="font-weight:bold">Address Line 2 : </span><%=address[0].addressline2%><br>
+                                        <span style="font-weight:bold">District : </span><%=address[0].district%><br>
+                                        <span style="font-weight:bold">State : </span><%=address[0].state%><br>
+                                        <span style="font-weight:bold">Country : </span><%=address[0].country%><br>
+                                        <span style="font-weight:bold">PIN No : </span> <%=address[0].pin%><br>
+                                        <span style="font-weight:bold">Mobile : </span> <%=address[0].mobile%><br>
+                                           
+                                        <a href="/profile/address-edit?id=<%=address[0].id%>">Edit <i class="icon-edit"></i></a></p>
+                                        <% }%>
+                                    </div><!-- End .card-body -->
+                                    </div><!-- End .card-dashboard -->
+                                </div><!-- End .col-lg-6 -->
+
+                               
+
+                            </div><!-- .End .tab-pane -->
+
+
+                               
+
+                            </div><!-- .End .tab-pane -->
+
+
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+<script>
+    var password = document.getElementById("password")
+  , confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+</script>
+<%-include('../layouts/user-footer.ejs') %>

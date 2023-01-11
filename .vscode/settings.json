@@ -1,0 +1,8 @@
+{
+    "git.ignoreLimitWarning": true,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true 
+    },
+    "terminal.explorerKind": "external"
+}
