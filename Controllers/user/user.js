@@ -6,39 +6,48 @@ const productModel = require('../../Model/productModel')
 const cartModel = require('../../Model/cartModel')
 const bannerModel = require('../../Model/bannerModel')
 const mongoose = require('mongoose')
+const orderModel = require('../../Model/orderModel')
 const bcrypt = require('bcrypt')
 
 const home = async (req, res) => {
-  const user = await userModel.findOne({_id:req.session.user})
+  const user = await userModel.findOne({ _id: req.session.user })
   const categories = await categoryModel.find({ status: true })
   const brands = await productModel.distinct('brand')
-  const banner = await bannerModel.find({ status: true})
-  res.render('user/home', { user,categories, brands,banner })
+  const banner = await bannerModel.find({ status: true })
+  res.render('user/home', { user, categories, brands, banner })
+}
+
+const error = async (req, res) => {
+  const user = await userModel.findOne({ _id: req.session.user })
+  const categories = await categoryModel.find({ status: true })
+  const brands = await productModel.distinct('brand')
+  const order = await orderModel.find({ userId: req.session.user })
+  res.render('user/error404', { user, categories, brands, order })
 }
 
 const product = async (req, res) => {
-  const user = await userModel.findOne({_id:req.session.user})
+  const user = await userModel.findOne({ _id: req.session.user })
   const categories = await categoryModel.find({ status: true })
   const brands = await productModel.distinct('brand')
   const products = await productModel.find({ status: true })
-  res.render('user/product', { user,categories, brands, products })
+  res.render('user/product', { user, categories, brands, products })
 }
 
 const productDetails = async (req, res) => {
-  const user = await userModel.findOne({_id:req.session.user})
+  const user = await userModel.findOne({ _id: req.session.user })
   const categories = await categoryModel.find({ status: true })
   const brands = await productModel.distinct('brand')
   const productId = req.query.id
   const productData = await productModel.findById(productId)
-  res.render('user/productDetails.ejs', { user,categories, brands, productData })
+  res.render('user/productDetails.ejs', { user, categories, brands, productData })
 }
 
 const profile = async (req, res) => {
-  const user = await userModel.findOne({_id:req.session.user})
+  const user = await userModel.findOne({ _id: req.session.user })
   const categories = await categoryModel.find({ status: true })
   const brands = await productModel.distinct('brand')
   const address = await userModel.aggregate([
-    { $match: { _id: mongoose.Types.ObjectId(req.session.user)} },
+    { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
     { $unwind: '$address' },
     {
       $project: {
@@ -51,46 +60,46 @@ const profile = async (req, res) => {
         pin: '$address.pin',
         mobile: '$address.mobile',
         id: '$address._id',
-        status:'$address.status'
+        status: '$address.status'
       }
     },
-      {
-        $sort: { status: -1}
-      }
+    {
+      $sort: { status: -1 }
+    }
   ])
-  wrong = req.query.wrong
-  succ = req.query.succ
-  res.render('user/userProfile', { user,categories, brands, address,wrong,succ })
+  const wrong = req.query.wrong
+  const succ = req.query.succ
+  res.render('user/userProfile', { user, categories, brands, address, wrong, succ })
 }
 
-let profileEdit = async (req,res)=>{
-  try{
-  if(req.body.current_password && req.body.new_password){
-    const userDetails=await userModel.findOne({_id : req.session.user})
-    const hashedCheck = await bcrypt.compare(
-         req.body.current_password,
-         userDetails.password
-       );
-       if (hashedCheck == true){
-        const hashedPassword = await bcrypt.hash(req.body.new_password, 10);
-        await userModel.updateOne({ _id : req.session.user }, { $set: { password : hashedPassword,name : req.body.name } })
+const profileEdit = async (req, res) => {
+  try {
+    if (req.body.current_password && req.body.new_password) {
+      const userDetails = await userModel.findOne({ _id: req.session.user })
+      const hashedCheck = await bcrypt.compare(
+        req.body.current_password,
+        userDetails.password
+      )
+      if (hashedCheck === true) {
+        const hashedPassword = await bcrypt.hash(req.body.new_password, 10)
+        await userModel.updateOne({ _id: req.session.user }, { $set: { password: hashedPassword, name: req.body.name } })
         res.redirect('/profile?succ=Password changed Successfully')
-       }else{
+      } else {
         res.redirect('/profile?wrong=Current Password is Incorrect')
-       }
-  }else{
-    res.redirect('/profile')
+      }
+    } else {
+      res.redirect('/profile')
+    }
+  } catch (error) {
+    console.log(error)
   }
-}catch(error){
-  console.log(error);
-}
 }
 
 const addressAdd = async (req, res) => {
   try {
-    const user = await userModel.findOne({_id:req.session.user})
+    const user = await userModel.findOne({ _id: req.session.user })
     await userModel.updateOne(
-      { _id:req.session.user },
+      { _id: req.session.user },
       {
         $push: {
           address: {
@@ -117,7 +126,7 @@ const addressAdd = async (req, res) => {
 
   var addressEdit = async (req, res) => {
     id = req.query.id
-    const user = await userModel.findOne({_id:req.session.user})
+    const user = await userModel.findOne({ _id: req.session.user })
     const categories = await categoryModel.find({ status: true })
     const brands = await productModel.distinct('brand')
     const edit = await userModel.aggregate([
@@ -139,13 +148,13 @@ const addressAdd = async (req, res) => {
       },
       { $match: { id: mongoose.Types.ObjectId(req.query.id) } }
     ])
-    res.render('user/addressEdit', { user,categories, brands, edit })
+    res.render('user/addressEdit', { user, categories, brands, edit })
   }
 
   var addressPost = async (req, res) => {
-    const user = await userModel.findOne({_id:req.session.user})
+    const user = await userModel.findOne({ _id: req.session.user })
     await userModel.updateOne(
-      { email:user.email,'address._id': id },
+      { email: user.email, 'address._id': id },
       {
         $set: {
           // name: req.body.name,
@@ -173,8 +182,8 @@ const addressAdd = async (req, res) => {
 
 const addressDelete = async (req, res) => {
   try {
-    const user = await userModel.findOne({_id:req.session.user})
-    email=user.email
+    const user = await userModel.findOne({ _id: req.session.user })
+    const email = user.email
     await userModel.updateOne(
       { email },
       { $pull: { address: { _id: req.query.id } } }
@@ -185,21 +194,20 @@ const addressDelete = async (req, res) => {
   }
 }
 
-const addressDefault = async(req,res)=>{
-  let id = req.query.id
+const addressDefault = async (req, res) => {
+  const id = req.query.id
   // console.log(id)
   await userModel.updateMany(
-    {_id: mongoose.Types.ObjectId(req.session.user)},
-    {$set: {'address.$[elem].status':false}},
-    {arrayFilters:[{'elem.status':true}]},
+    { _id: mongoose.Types.ObjectId(req.session.user) },
+    { $set: { 'address.$[elem].status': false } },
+    { arrayFilters: [{ 'elem.status': true }] }
   )
-await userModel.updateOne(  
-  {_id: req.session.user, "address._id":id},
-  {$set: {"address.$.status": true} }
-)
+  await userModel.updateOne(
+    { _id: req.session.user, 'address._id': id },
+    { $set: { 'address.$.status': true } }
+  )
   res.redirect('/profile')
 }
-
 
 // const userCart = async (req, res) => {
 //   try {
@@ -279,6 +287,7 @@ await userModel.updateOne(
 
 module.exports = {
   home,
+  error,
   product,
   productDetails,
   profile,
@@ -287,7 +296,7 @@ module.exports = {
   addressDelete,
   addressEdit,
   addressPost,
-  addressDefault,
+  addressDefault
   // userCart,
   // addToCart
 }

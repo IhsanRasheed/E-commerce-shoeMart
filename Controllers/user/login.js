@@ -15,7 +15,7 @@ const userVerfication = async (req, res) => {
       if (userFind.status === true) {
         const hashedCheck = await bcrypt.compare(inputPassword, userFind.password)
         if (hashedCheck === true) {
-          req.session.user=userFind._id
+          req.session.user = userFind._id
           //  console.log(req.session.user)
           res.redirect('/')
         } else {

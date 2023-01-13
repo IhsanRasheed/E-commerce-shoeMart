@@ -10,6 +10,7 @@ const adminVerification = async (req, res) => {
     const password = req.body.password
     const adminAccount = await adminModel.findOne({ email })
     if (email === adminAccount.email && password === adminAccount.password) {
+      req.session.admin = email
       res.redirect('/admin/home')
     } else {
       res.redirect('/admin/login?wrong=Password wrong')

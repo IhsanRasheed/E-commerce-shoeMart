@@ -1,19 +1,18 @@
 const isLogin = (req, res, next) => {
-  if (req.session.user) {
+  if (req.session.admin) {
     next()
   } else {
-    res.redirect('/login')
+    res.redirect('/admin/login')
   }
 }
 
 const isLogout = (req, res, next) => {
-  if (req.session.user) {
-    res.redirect('/')
+  if (req.session.admin) {
+    res.redirect('/admin/home')
   } else {
     next()
   }
 }
-
 module.exports = {
   isLogin,
   isLogout

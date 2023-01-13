@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: true }))
 
 // port specified
 const port = process.env.PORT
-console.log(port)
 app.listen(port, () => console.log(`Server is running at  http://localhost:${port}`))
 
 // Static path
@@ -37,3 +36,8 @@ app.use('/user', user)
 
 const adminRouter = require('./routes/adminRoute')
 app.use('/admin', adminRouter)
+
+// Error
+app.use('*', (req, res) => {
+  res.redirect('/404')
+})
