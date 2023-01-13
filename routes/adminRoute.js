@@ -8,6 +8,7 @@ const category = require('../Controllers/admin/category')
 const product = require('../Controllers/admin/product')
 const order = require('../Controllers/admin/order')
 const coupon = require('../Controllers/admin/coupon')
+const banner = require('../Controllers/admin/banner')
 
 // Admin side
 router.get('/login', admin.login)
@@ -40,6 +41,12 @@ router.post('/order',order.update)
 router.get('/coupon',coupon.management)
 router.post('/coupon',coupon.add )
 router.get('/coupon/block',coupon.block)
+
+// Banner
+router.get('/banner',banner.management)
+router.post('/banner',upload.array('image'),banner.add)
+router.get('/banner/block',banner.block)
+
 
 
 module.exports = router

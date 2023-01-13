@@ -33,6 +33,6 @@ const couponSchema = new mongoose.Schema(
     }
 )
 
-const coupenCollection = mongoose.model('coupen', couponSchema)
+const coupenCollection = mongoose.model('coupon', couponSchema)
 
 module.exports = coupenCollection

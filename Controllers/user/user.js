@@ -4,6 +4,7 @@ const userModel = require('../../Model/userModel')
 const categoryModel = require('../../Model/categoryModel')
 const productModel = require('../../Model/productModel')
 const cartModel = require('../../Model/cartModel')
+const bannerModel = require('../../Model/bannerModel')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
@@ -11,7 +12,8 @@ const home = async (req, res) => {
   const user = await userModel.findOne({_id:req.session.user})
   const categories = await categoryModel.find({ status: true })
   const brands = await productModel.distinct('brand')
-  res.render('user/home', { user,categories, brands })
+  const banner = await bannerModel.find({ status: true})
+  res.render('user/home', { user,categories, brands,banner })
 }
 
 const product = async (req, res) => {

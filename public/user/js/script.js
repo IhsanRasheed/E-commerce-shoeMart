@@ -1,4 +1,3 @@
-const { response } = require("express");
 
 function add_to_cart(proId){
     $.ajax({
@@ -231,9 +230,9 @@ function setaddress(id){
         let total=$('#total').html()
         let subtotal=$('#subtotal').html()
         discount=parseInt(discount)
-        total=parseInt(total)
-        let discountedPrice=(discount*total)/100
-        total=total-discountedPrice
+        subtotal=parseInt(subtotal)
+        let discountedPrice=(discount*subtotal)/100
+        total=subtotal-discountedPrice
         $('#total').html(total)
         $('#coupon_code').html(code)
         $('#couponId').val(couponId)
@@ -257,3 +256,74 @@ function setaddress(id){
       }
     });
   };
+
+
+
+//   function submitForm() {
+//     e.preventDefault();
+//     var formData = $(this).serialize();
+//     $.ajax({
+//                    url: '/checkout',
+//                     method: 'POST',
+                  
+//                      data: formData,
+//                     success:  (response) => {
+  
+   
+// }
+//     })}
+
+
+//     $("input[type='submit']").on("click", function(){
+
+//         e.preventDefault();
+//     var formData = $(this).serialize();
+//     $.ajax({
+//                    url: '/checkout',
+//                     method: 'POST',
+                  
+//                      data: formData,
+//                     success:  (response) => {
+//                         // if(response.order){
+//                         //     let order =response.order
+//                         // razorPay(order)
+//                         // }
+//                         location.href="/"
+// }
+//         // your code here
+//     })
+// })
+
+
+
+    
+
+
+
+
+
+
+
+// function verifyPayment(payment, order,orderDetails) {
+//     // console.log(payment)
+//     // console.log(order)
+
+//     $.ajax({
+//         url: "/verifyPayment",
+//         data: {
+//             payment,
+//             order,
+//             orderDetails
+//         },
+//         method: "post",
+//         success: (response) => {
+//             if (response.success) {
+//                 location.href = "/payment_succuss";
+//             } else {
+//                 location.href = "/payment_fail";
+//             }
+//         },
+//     });
+// }
+    
+   

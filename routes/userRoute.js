@@ -54,6 +54,7 @@ router.get('/wish-item-delete',session.isLogin,shop.wishDelete)
 // Checkout
 router.get('/checkout',session.isLogin,shop.checkOut)
 router.post('/checkout',session.isLogin,shop.postCheckOut)
+// router.post('/verifyPayment',session.isLogin,shop.verifyPayment)
 
 
 // Coupon
@@ -64,6 +65,9 @@ router.get('/order',session.isLogin,order.orderPage)
 router.get('/order/cancel_orders',session.isLogin,order.orderCancel)
 router.get('/order/view_orders',session.isLogin,order.orderDetails)
 
+// order
+router.get('/success',shop.success)
+router.get('/failed',shop.failed)
 
 
 

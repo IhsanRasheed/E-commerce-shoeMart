@@ -14,11 +14,14 @@
                                             }
                                         }
                                     }'>
+
+                                    <% if(banner!=null){ %>
+                                    <% banner.forEach((data)=>{ %>
                                     <div class="intro-slide">
                                         <figure class="slide-image">
                                             <picture>
-                                                <source media="(max-width: 480px)" srcset="assets/images/slider/slide-1-480w.jpg">
-                                                <img src="/Public/user/images/slider/slide-1.jpg" style="-webkit-fill-available: width;" alt="Image Desc">
+                                                <source media="(max-width: 480px)" srcset="/Public/admin/products/<%=data.image[1].filename%>">
+                                                <img src="/Public/admin/products/<%=data.image[0].filename%>" alt="Image Desc">
                                             </picture>
                                         </figure><!-- End .slide-image -->
 
@@ -32,44 +35,11 @@
                                             </a> -->
                                         </div><!-- End .intro-content -->
                                     </div><!-- End .intro-slide -->
+                                    <% }) %>
+                                    <% } %>
+                                    
 
-                                    <div class="intro-slide">
-                                        <figure class="slide-image">
-                                            <picture>
-                                                <source media="(max-width: 480px)" srcset="assets/images/slider/slide-2-480w.jpg">
-                                                <img src="/Public/user/images/slider/slide-2.jpg" alt="Image Desc">
-                                            </picture>
-                                        </figure><!-- End .slide-image -->
-
-                                        <div class="intro-content">
-                                            <h3 class="intro-subtitle"></h3><!-- End .h3 intro-subtitle -->
-                                            <h1 class="intro-title"></h1><!-- End .intro-title -->
-
-                                            <!-- <a href="category.html" class="btn btn-outline-white">
-                                                <span>SHOP NOW</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </a> -->
-                                        </div><!-- End .intro-content -->
-                                    </div><!-- End .intro-slide -->
-
-                                    <div class="intro-slide">
-                                        <figure class="slide-image">
-                                            <picture>
-                                                <source media="(max-width: 480px)" srcset="assets/images/slider/slide-3-480w.jpg">
-                                                <img src="/Public/user/images/slider/slide-3.jpg" alt="Image Desc">
-                                            </picture>
-                                        </figure><!-- End .slide-image -->
-
-                                        <div class="intro-content">
-                                            <h3 class="intro-subtitle"></h3><!-- End .h3 intro-subtitle -->
-                                            <h1 class="intro-title"> JUST<br>DO IT.</h1><!-- End .intro-title -->
-
-                                            <!-- <a href="category.html" class="btn btn-outline-white">
-                                                <span>SHOP NOW</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </a> -->
-                                        </div><!-- End .intro-content -->
-                                    </div><!-- End .intro-slide -->
+                                    
                                 </div><!-- End .intro-slider owl-carousel owl-simple -->
                                 
                                 <span class="slider-loader"></span><!-- End .slider-loader -->

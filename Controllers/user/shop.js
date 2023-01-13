@@ -6,6 +6,9 @@ const wishListModel = require("../../Model/wishlistModel");
 const couponModel = require('../../Model/couponModel')
 const order = require("../../Model/orderModel");
 const mongoose = require("mongoose");
+const instance = require('../../middleware/razorpay')
+const crypto = require('crypto');
+const paypal = require("paypal-rest-sdk");
 
 const userCart = async (req, res) => {
   try {
@@ -292,43 +295,7 @@ const userWishlist = async (req, res) => {
   }
 };
 
-// const addToWishlist = async (req, res) => {
-//   try {
-//     const id = req.query.id;
-//     let exist1 = await wishListModel.aggregate([
-//       {
-//         $match: {
-//           $and: [
-//             { userId: mongoose.Types.ObjectId(req.session.user) },
-//             {
-//               wishList: {
-//                 $elemMatch: { productId: new mongoose.Types.ObjectId(id) },
-//               },
-//             },
-//           ],
-//         },
-//       },
-//     ]);
-//     console.log(exist1);
 
-//     if (exist1.length === 0) {
-//       await wishListModel.updateOne(
-//         { userId: req.session.user },
-//         { $push: { wishList: { productId: id } } },
-//         { upsert: true }
-//       );
-//       res.redirect("/wishlist");
-//     } else {
-//       await wishListModel.updateOne(
-//         { "wishList.productId": id },
-//         { $inc: { "wishList.$.qty": 1 } }
-//       );
-//       res.redirect("/wishlist");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 // Ajax
 
@@ -523,7 +490,6 @@ const postCheckOut = async (req, res) => {
           acc = acc + curr.total;
           return acc;
         }, 0);
-        // console.log(cartItems)
         
         if (req.body.couponid === ''){
           const orderDetails = new order({
@@ -543,9 +509,9 @@ const postCheckOut = async (req, res) => {
             totalAmount: subtotal,
             paymentMethod: "COD",
           });
-          // console.log(orderDetails);
           await orderDetails.save();
           res.redirect('/')
+          // res.json({CODSuccess:true})
         }else{
           await couponModel.updateOne({_id:req.body.couponid}, { $push: { users: { userId:req.session.user} } })
           const orderDetails = new order({
@@ -566,74 +532,236 @@ const postCheckOut = async (req, res) => {
             totalAmount: req.body.total,
             paymentMethod: "COD",
           });
-          // console.log(orderDetails);
           await orderDetails.save();
           res.redirect('/')
+          // res.json({CODSuccess:true})
         }
       }
       if (req.body.payment_mode == "pay") {
-        console.log("null pay");
-      }
-    // } else {
-    //   if (req.body.payment_mode == "COD") {
-    //     const productData = await cartModel.aggregate([
-    //       { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
-    //       { $unwind: "$cartItem" },
-    //       {
-    //         $project: {
-    //           _id: 0,
-    //           productId: "$cartItem.productId",
-    //           quantity: "$cartItem.qty",
-    //         },
-    //       },
-    //     ]);
-    //     const address = await userModel.aggregate([
-    //       { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
-    //       { $unwind: "$address" },
-    //       {
-    //         $project: {
-    //           name: "$address.name",
-    //           addressline1: "$address.addressline1",
-    //           addressline2: "$address.addressline2",
-    //           district: "$address.distict",
-    //           state: "$address.state",
-    //           country: "$address.country",
-    //           pin: "$address.pin",
-    //           mobile: "$address.mobile",
-    //           id: "$address._id",
-    //         },
-    //       },
-    //       { $match: { id: mongoose.Types.ObjectId(req.body.address) } },
-    //     ]);
-    //     // console.log(address);
+        const productData = await cartModel.aggregate([
+          { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
+          { $unwind: "$cartItem" },
+          {
+            $project: {
+              _id: 0,
+              productId: "$cartItem.productId",
+              quantity: "$cartItem.qty",
+            },
+          }
+        ]);
         
-    //     const orderDetails = new order({
-    //       userId: req.session.user,
-    //       name: address[0].name,
-    //       number: address[0].mobile,
-    //       address: {
-    //         addressline1: address[0].addressline1,
-    //         addressline2: address[0].addressline2,
-    //         district: address[0].district,
-    //         state: address[0].state,
-    //         country: address[0].country,
-    //         pin: address[0].pin,
-    //       },
-    //       orderItems: productData,
-    //       // totalAmount: subtotal,
-    //       paymentMethod: "COD",
-    //     });
-    //     // console.log(orderDetails);
-    //     await orderDetails.save();
-    //     res.redirect('/')
-    //   } else {
-    //     console.log("choose address online payment");
-    //   }
-    // }
+        const cartItems = await cartModel.aggregate([
+          { $match: {userId: mongoose.Types.ObjectId(req.session.user)}},
+          { $unwind: "$cartItem"},
+          { $project: {
+            productId: "$cartItem.productId",
+            qty: "$cartItem.qty"
+          }},
+          {
+            $lookup: {
+              from: 'products',
+              localField: 'productId',
+              foreignField: '_id',
+              as: 'productDetails'
+            }
+          },
+          { $unwind: "$productDetails"},
+          {
+            $project: {
+              price: "$productDetails.price",
+              qty: "$qty"
+            }
+          },
+          {
+            $addFields:{
+              total: { $multiply:["$qty","$price"]}
+            }
+          }
+        ])
+        const subtotal = cartItems.reduce( (acc, curr)=> {
+          acc = acc + curr.total;
+          return acc;
+        }, 0);
+
+        if (req.body.couponid === ''){
+          const orderDetails = new order({
+            userId: req.session.user,
+            name: req.body.name,
+            number: req.body.mobile,
+            address: {
+              addressline1: req.body.addressline1,
+              addressline2: req.body.addressline2,
+              district: req.body.district,
+              state: req.body.state,
+              country: req.body.country,
+              pin: req.body.pin,
+            },        
+            orderItems: productData,
+            subTotal: subtotal,
+            totalAmount: subtotal,
+            paymentMethod: "online Payment",
+          });
+          await orderDetails.save();
+
+
+          var totals =  subtotal
+          let total= parseInt(totals)
+          const create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:4000/success",
+                "cancel_url": "http://localhost:4000/failed"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "item",
+                        "sku": "item",
+                        "price":total,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "USD",
+                    "total":total
+                },
+                "description": "This is the payment description."
+            }]
+          };
+          paypal.payment.create(create_payment_json, async function (error, payment) {
+            if (error) {
+              throw error;
+            } else {
+              for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === "approval_url") {
+                  res.redirect(payment.links[i].href);
+          
+          
+          }
+              }
+            }
+          });
+
+        }else{
+          await couponModel.updateOne({_id:req.body.couponid}, { $push: { users: { userId:req.session.user} } })
+          const orderDetails = new order({
+            userId: req.session.user,
+            name: req.body.name,
+            number: req.body.mobile,
+            address: {
+              addressline1: req.body.addressline1,
+              addressline2: req.body.addressline2,
+              district: req.body.district,
+              state: req.body.state,
+              country: req.body.country,
+              pin: req.body.pin,
+            },
+            orderItems: productData,
+            couponUsed:req.body.couponid,
+            subTotal: subtotal,
+            totalAmount: req.body.total,
+            paymentMethod: "COD",
+          });
+          await orderDetails.save();
+
+
+          var totals =  subtotal*0.012
+          let total= parseInt(totals)
+          const create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:4000/success",
+                "cancel_url": "http://localhost:4000/failed"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "item",
+                        "sku": "item",
+                        "price": total,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "USD",
+                    "total":total
+                },
+                "description": "This is the payment description."
+            }]
+          };
+          paypal.payment.create(create_payment_json, async function (error, payment) {
+            if (error) {
+              throw error;
+            } else {
+              for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === "approval_url") {
+                  res.redirect(payment.links[i].href);
+          
+          
+          }
+              }
+            }
+          });
+        }        
+      }
+    
   } catch (error) {
     console.log(error);
   }
 };
+
+paypal.configure({
+  mode: "sandbox", //sandbox or live
+  client_id:
+    "AcXskD-_4tOiV4Jc9j0_AHbDQSkNbN_kH2zntIQeGdrwI5oSYZvQZWh9EzixiiKaBTWA_zzzLexd-jhv",
+  client_secret:
+    "EH9yBhfpuT8SPBR4RmcYgoZIgOp8eQwlazFXkedrqzfoIryDRBXmu9smKZFqSZM46VlLOYXLrnZ03Fg4",
+});
+
+
+
+
+// const verifyPayment= async (req, res) => {
+//   try{
+//     const details = req.body;
+//     let orderDetails=req.body.orderDetails
+//     let hmac = crypto.createHmac("sha256", process.env.KEYSECRET);
+//     hmac.update(details.payment.razorpay_order_id + "|" + details.payment.razorpay_payment_id);
+//     hmac = hmac.digest("hex");
+
+//     if (hmac == details.payment.razorpay_signature) {
+//       if ( 'couponUsed' in orderDetails){
+//         await coupon.updateOne({_id:orderDetails.couponUsed}, { $push: { users: { userId:req.session.user} } })
+
+//       orderDetails=new order(orderDetails)
+//         await orderDetails.save()
+//       res.json({success:true})
+//       }else{
+//       let productDetails=orderDetails.orderItems
+//         for(let i =0;i<productDetails.length;i++){
+//             await product.updateOne({_id:productDetails[i]},{$inc:{stock:-(productDetails.quantity[i])}})
+//         }
+//         console.log(productDetails);
+//         orderDetails=new order(orderDetails)
+//         await orderDetails.save()
+//         res.json({success:true})
+//       }
+//     } else {
+//       console.log(err);
+//       res.json({ failed:true});
+//     }
+//   }catch(error){
+//     console.log(error)
+//   }
+//   }
 
 
 
@@ -669,18 +797,34 @@ const setAddressCheckout=async (req,res)=>{
 
 
 
+const success = async(req,res)=>{
+  const user = await userModel.findOne({ _id: req.session.user });
+  const brands = await productModel.distinct("brand");
+  const categories = await categoryModel.find({ status: true });
+  res.render('user/success',{user,brands,categories})
+}
+
+const failed = async(req,res)=>{
+  const user = await userModel.findOne({ _id: req.session.user });
+  const brands = await productModel.distinct("brand");
+  const categories = await categoryModel.find({ status: true });
+  res.render('user/failed',{user,brands,categories})
+}
+
+
 module.exports = {
   userCart,
-  // addToCart,
   add_to_cart,
   cartDelete,
   productQtyAdd,
   productQtySub,
   userWishlist,
-  // addToWishlist,
   addWishlist,
   wishDelete,
   checkOut,
   postCheckOut,
   setAddressCheckout,
+  success,
+  failed
+
 };

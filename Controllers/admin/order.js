@@ -1,5 +1,4 @@
 const orderModel = require('../../Model/orderModel')
-const mongoose = require('mongoose')
 
 const management = async (req,res)=>{
     try{

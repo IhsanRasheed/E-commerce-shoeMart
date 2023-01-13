@@ -1,5 +1,5 @@
 const couponModel = require('../../Model/couponModel')
-const mongoose = require('mongoose')
+
 
 const management = async (req,res)=> {
     try{
