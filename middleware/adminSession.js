@@ -13,6 +13,7 @@ const isLogout = (req, res, next) => {
     next()
   }
 }
+
 module.exports = {
   isLogin,
   isLogout

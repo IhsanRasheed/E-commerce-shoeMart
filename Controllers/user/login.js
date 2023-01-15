@@ -2,7 +2,11 @@ const userModel = require('../../Model/userModel')
 const bcrypt = require('bcrypt')
 
 const loginPage = (req, res) => {
-  res.render('user/login', req.query)
+  try {
+    res.render('user/login', req.query)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // User login verification

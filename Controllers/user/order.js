@@ -42,6 +42,7 @@ const orderDetails = async (req, res) => {
           address: '$address',
           productId: '$orderItems.productId',
           qty: '$orderItems.quantity',
+          price: '$orderItems.price',
           totalAmount: '$totalAmount',
           payment: '$paymentMethod',
           orderDate: '$orderDate',
@@ -65,6 +66,7 @@ const orderDetails = async (req, res) => {
           address: '$address',
           productId: '$productId',
           qty: '$qty',
+          price: '$price',
           totalAmount: '$totalAmount',
           payment: '$payment',
           orderDate: '$orderDate',
@@ -72,7 +74,6 @@ const orderDetails = async (req, res) => {
           productName: '$productData.name',
           brand: '$productData.brand',
           size: '$productData.size',
-          price: '$productData.price',
           image: '$productData.image'
         }
       },
@@ -82,7 +83,6 @@ const orderDetails = async (req, res) => {
         }
       }
     ])
-    console.log(productData)
     res.render('user/orderHistory', { user, categories, brands, productData })
   } catch (error) {
     console.log(error)

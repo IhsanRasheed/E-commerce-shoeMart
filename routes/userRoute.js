@@ -8,6 +8,7 @@ const user = require('../Controllers/user/user')
 const shop = require('../Controllers/user/shop')
 const coupon = require('../Controllers/user/coupon')
 const order = require('../Controllers/user/order')
+// const checkout = require('../Controllers/user/checkout')
 
 // Signup
 router.get('/signup', session.isLogout, signup.signupPage)
@@ -17,7 +18,7 @@ router.post('/otpVerification', session.isLogout, signup.otpVerification)
 
 // Login
 router.get('/login', session.isLogout, login.loginPage)
-router.post('/login', session.isLogout, login.userVerfication)
+router.post('/login', login.userVerfication)
 
 // Home
 router.get('/', user.home)
@@ -42,7 +43,7 @@ router.post('/setaddress', session.isLogin, shop.setAddressCheckout)
 // Cart
 router.get('/cart', session.isLogin, shop.userCart)
 // router.get('/addtocart',session.isLogin,shop.addToCart)
-router.post('/add_to_cart', session.isLogin, shop.add_to_cart)
+router.post('/add_to_cart', session.isLogin, shop.addtocart)
 router.patch('/productadd', session.isLogin, shop.productQtyAdd)
 router.patch('/productsub', session.isLogin, shop.productQtySub)
 router.get('/cart-item-delete', session.isLogin, shop.cartDelete)

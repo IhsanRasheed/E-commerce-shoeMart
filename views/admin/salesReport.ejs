@@ -95,105 +95,104 @@
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
                             Logout
                         </a>
-                        
+
                     </div>
                 </div>
 
             </nav>
         </div>
+
+
         <div id="layoutSidenav_content">
+            
+              <div class="container-fluid px-4">
+                    <h1 class="mt-4">Sales Report</h1> 
+                    
+                    <form action="" method="post" class="mb-2"  >
+                        <span class="d-flex" style="justify-content: end;" >
+                                        <label for="exampleFormControlInput1">Starting Date </label>
+                                        <input type="date" class="form-control " style="width: 14%;" id="exampleFormControlInput1" placeholder="Name" name="from">
+                                        <label for="exampleFormControlInput1" style="padding-left: 1%;">Ending Date</label>
+                                        <input type="date" class="form-control " style="width: 14%; " id="exampleFormControlInput1" placeholder="Name" name="to"  >
+                                        <div style="padding-left: 1%;">
+                                        <button type="submit" class="btn btn-primary" >Submit</button>
+                                        </div>
+                        </span>
+                    </form>
+    
+              </div>
+              <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="padding-top: 125px;">
+                <div class="modal-dialog ">
+                  <div class="modal-content ">
+                    <div class="modal-header ">
+                      <h5 class="modal-title " id="staticBackdropLabel">Add Category</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">
+                            <div class="form-group">
+                              <!-- <label for="exampleFormControlFile1">Example file input</label>
+                              <input type="file" class="form-control-file" id="exampleFormControlFile1"> -->
+                            <label for="exampleFormControlInput1">Category Name</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name" name="category">
+                            
+                            </div>
+                          
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-
-            <main>
-                <div class="container-fluid px-4">
-                    <h1 class="mt-3">Order Management</h1>
-                   
-
+            
   <div class="card mb-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
-        Order DataTable 
-       
-
+        Sales Data Table 
     </div>
     <div class="card-body">
-        <% if(orders!=null) { %>
+        <% if(orderDetails!=null) { %>
         <table id="datatablesSimple">
             <thead>
                 <tr>
+                    <th>User Id</th>
                     <th>Order Date</th>
-                    <th>Name</th>                  
-                    <th>Total Amount</th>
-                    <th>Payment Method</th>              
                     <th>Order Status</th>
+                    <th>Payment Method</th>
+                    <th>Total Amount</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <th>Order Date</th>
-                    <th>Name</th>                  
-                    <th>Total Amount</th>
-                    <th>Payment Method</th>
+                    <th>User Id</th>
+                    <th>Order Details</th>
                     <th>Order Status</th>
-                   
+                    <th>Payment Method</th>
+                    <th>Total Amount</th>
                 </tr>
             </tfoot>
             <tbody>
-                
-                <% orders.forEach((data)=>{ %>
+                <% orderDetails.forEach((data)=>{ %>
               <tr>
-                 
-                    <%let date = Date.now(data.orderDate)%>
-                    <%const dt = new Date(date)%>
-                    <%const todate = dt.toLocaleDateString();%>
-                    <td><%=todate%></td>
-
-                <td>  <%=data.name%>    </td>
-                <td>  <%=data.totalAmount%>    </td>
-                <td>   <%=data.paymentMethod%> </td>
-
-                <td>  <form action="/admin/order" method="post" >  
-                    <select name="orderstatus" id="" class="rounded-3">
-                        <% if (data.orderStatus !== 'data.orderStatus') { %>
-                    <option value="<%=data.orderStatus%>" selected>  <%=data.orderStatus%>   </option>
-                    <% } %>
-                    <% if (data.orderStatus !== 'processing') { %>
-                        <option value="processing">processing</option>
-                        <% } %>
-                    <!-- <option value="processing">processing</option> -->
-                    <% if (data.orderStatus !== 'shipped') { %>
-                    <option value="shipped">shipped</option>
-                    <% } %>
-                    <% if (data.orderStatus !== 'delivered') { %>
-                    <option value="delivered">delivered</option>
-                    <% } %>
-                    <% if (data.orderStatus !== 'cancelled') { %>
-                    <option value="cancelled">cancelled</option>'[
-                    '
-                    <% } %>
-                    <% if (data.orderStatus !== 'refunded') { %>
-                    <option value="refunded">refunded</option>
-                    <% } %>
-                </select>
-                 <input type="text" value="<%=data._id%>" name="orderid" hidden>
-                 <button type="submit" class="rounded-3 border-0 btn-primary" onclick="return confirm('Are you sure to update the order')" >Update</button>   
-                </form>
-            
-
-                    </td>
-                    
+                <td><%=data._id%></td>
+                <% let date =data.orderDate %>
+                <% const format = new Date(date  ); %>
+                <% const todate = format.toLocaleDateString(); %>
+                <td><%=todate%></td>
+                <td><%=data.orderStatus%></td>
+                <td> <%=data.paymentMethod%> </td>
+                <td>$ <%=data.totalAmount%></td>
               </tr>
               <%})%>
             </tbody>
         </table>
         <%}%>
     </div>
-</div>
-
-                </div>
-            </main>
-
-
+</div>       
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
@@ -212,7 +211,7 @@
     <script src="/public/admin/adminhome/js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="/public/admin/adminhome/assets/demo/chart-area-demo.js"></script>
-    <script src="admin/adminhome/assets/demo/chart-bar-demo.js"></script>
+    <script src="/public/admin/adminhome/assets/demo/chart-bar-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
     <script src="/public/admin/adminhome/js/datatables-simple-demo.js"></script>
 </body>

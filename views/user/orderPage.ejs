@@ -108,7 +108,7 @@
             </svg>
           </button>
           <% } else { %>
-          <a href="/order/cancel_orders?id=<%= order._id %>"
+          <a href="/order/cancel_orders?id=<%= order._id %>" onclick="return confirm('Are you sure to cancel the order')" >
             ><button type="button" class="btn btn-outline-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

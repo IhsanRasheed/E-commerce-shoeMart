@@ -77,7 +77,7 @@
                                 <a href="#">Links</a>
                                 <ul>
                                     <li><a href="tel:#"><i class=""></i></a></li>
-                                    <li><a href="/wishlist"><i class="icon-heart-o"></i>Wishlist <span>(3)</span></a></li>
+                                    <li><a href="/wishlist"><i class="icon-heart-o" ></i>Wishlist <span>(0)</span></a></li>
                                     <li><a href="about.html">About Us</a></li>
                                     <li><a href="contact.html">Contact Us</a></li>
                                     <!-- <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li> -->
@@ -101,14 +101,14 @@
                         </button>
 
                         <a href="/" class="logo">
-                            <img src="/Public/user/images/logoss.png" alt="Molla Logo" width="205" height="50">
+                            <img src="" alt="Molla Logo" width="205" height="50">
                         </a>
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrow">
                                <% categories.forEach((data)=>{ %>             
                                 <li>
-                                    <a href="/products" class="sf-with-ul"><%= data.name%> </a>
+                                    <a href="/products?catId=<%=data._id%>" class="sf-with-ul"><%= data.name%> </a>
 
                                     <div class="megamenu megamenu-sm">
                                         <div class="row no-gutters">
@@ -116,9 +116,8 @@
                                                 <div class="menu-col">
                                                     <div class="menu-title"> <%= data.name%> Brands</div><!-- End .menu-title -->
                                                     <ul>
-                                                        <% brands.forEach((data)=>{ %>
-
-                                                        <li><a href="product.html"><%=data%></a></li>
+                                                        <% brands.forEach((brand)=>{ %>
+                                                        <li><a href="/products?catId=<%=data._id%>&brand=<%=brand%>"><%=brand%></a></li>
                                                         <% }) %>                      
                                                     </ul>
 
@@ -156,7 +155,7 @@
                            <div class="dropdown cart-dropdown">
                             <a href="/cart" class="dropdown-toggle" role="button" >
                                 <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">2</span>
+                                <span class="cart-count" id="cart_count">0</span>
                             </a>
 
                     </div><!-- End .header-right -->

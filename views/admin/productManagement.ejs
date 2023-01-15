@@ -85,6 +85,11 @@
                             bannner
                         </a>
 
+                        <a class="nav-link" href="sales">
+                            <div class="sb-nav-link-icon"><i class="fa-sharp fa-solid fa-copyright"></i></div>
+                            Sales Report
+                        </a>
+
                         <a class="nav-link" href="product">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
                             Logout
@@ -170,6 +175,7 @@
                                 <!-- <th>No.</th> -->
                                 <th>Name</th> 
                                 <th>Image</th>
+                                <th>Price</th>
                                 <th>Category</th> 
                                 <th>Size</th>
                                 <th>stock</th>
@@ -183,6 +189,7 @@
                                 <!-- <th>No.</th> -->
                                 <th>Name</th>
                                 <th>Image</th>
+                                <th>Price</th>
                                 <th>Category</th>
                                 <th>Size</th>
                                 <th>Stock</th>
@@ -198,8 +205,8 @@
 
                             <td><img src="/public/admin/products/<%=productData.image[0].filename%>" style="width:150px"></td>
                 
-
-                            <td><%=productData.catData[0].name%></td>
+                            <td>$ <%=productData.price%></td>
+                            <td><%=productData.catData[0].name%></td>                           
                             <td><%=productData.size%></td>
                             <td><%=productData.stock%></td>
                             <td>

@@ -26,11 +26,20 @@ const error = async (req, res) => {
 }
 
 const product = async (req, res) => {
-  const user = await userModel.findOne({ _id: req.session.user })
-  const categories = await categoryModel.find({ status: true })
-  const brands = await productModel.distinct('brand')
-  const products = await productModel.find({ status: true })
-  res.render('user/product', { user, categories, brands, products })
+  try {
+    const user = await userModel.findOne({ _id: req.session.user })
+    const categories = await categoryModel.find({ status: true })
+    const brands = await productModel.distinct('brand')
+    if (req.query.catId && req.query.brand) {
+      const products = await productModel.find({ category: req.query.catId, brand: req.query.brand, status: true })
+      res.render('user/product', { user, categories, brands, products })
+    } else {
+      const products = await productModel.find({ category: req.query.catId, status: true })
+      res.render('user/product', { user, categories, brands, products })
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const productDetails = async (req, res) => {
