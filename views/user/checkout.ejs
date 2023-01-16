@@ -1,11 +1,15 @@
 <%- include('../layouts/user-header.ejs') %>
 <main class="main">
-   
+    <div class="page-header text-center" style="background-image: url('/Public/user/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Checkout<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="/cart">Cart</a></li>
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
         </div><!-- End .container -->
@@ -14,7 +18,7 @@
     <div class="page-content">
         <div class="checkout">
             <div class="container">
-                <form action="/checkout"  method="post" id="form">
+                <form action="/checkout"  method="post">
                     <label for="cars" style="font-weight: bold;"> Choose Address:</label>
                     
                     <select id="cars" name="address" style="height: 32px;"  onchange="setaddress(this.value)">
@@ -76,7 +80,7 @@
                                         <input type="text" class="form-control"   placeholder="coupon code" id="couponCode" name="copouncode">
                                         <input type="text" id="couponId" value="" name="couponid" hidden>
                                         <div class="input-group-append" style="height: fit-content;">
-                                            <button class="btn btn-outline-primary-2" id="coupon_button" ><i class="icon-long-arrow-right"></i></button>
+                                            <button class="btn btn-outline-primary-2" id="coupon_button" onclick="couponCheck(event)"><i class="icon-long-arrow-right"></i></button>
                                             <!-- <p>fgf</p> -->
                                         </div><!-- .End .input-group-append -->
                                     </div><!-- End .input-group -->
@@ -98,7 +102,7 @@
                                         <% cartItems.forEach((item)=>{ %>
                                         <tr>
                                             <td><%=item.name%></td>
-                                            <td>$<%=item.total%></td>
+                                            <td>$ <%=item.total%></td>
                                         </tr>
                                          <% }) %>
                                         <!-- <tr>
@@ -107,7 +111,7 @@
                                         </tr> -->
                                         <tr class="summary-subtotal">
                                             <td>Subtotal:</td>
-                                            <td>$<span id="subtotal"><%=subtotal%></span> </td>
+                                            <td>$ <span id="subtotal"><%=subtotal%></span> </td>
                                         </tr><!-- End .summary-subtotal -->
                                         <tr>
                                             <td>Shipping:</td>
@@ -119,7 +123,7 @@
                                         </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>$<span id="total"><%=subtotal%></span></td>
+                                            <td>$ <span id="total"><%=subtotal%></span></td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->
@@ -128,13 +132,13 @@
                                 <div class="accordion-summary" id="accordion-payment">
                                    
                                     <input type="radio" id="html" name="payment_mode" value="COD">
-                                           <label for="html">COD</label><br>
+                                           <label for="html">COD</label><br>
                                     <input type="radio" id="html" name="payment_mode" value="pay">
-                                           <label for="html">Online Payment</label><br>
+                                           <label for="html">Online Payment</label><br>
                                   
                                 </div>
 
-                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" >
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                     <span class="btn-text">Place Order</span>
                                     <span class="btn-hover-text">Proceed to Payment</span>
                                 </button>
@@ -147,5 +151,4 @@
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 
-
-<%-include('../layouts/user-footer.ejs') %>
+<%-include('../layouts/user-footer.ejs') %> r
