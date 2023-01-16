@@ -22,19 +22,19 @@
     <meta name="application-name" content="Molla">
     <meta name="msapplication-TileColor" content="#cc9966">
     <meta name="msapplication-config" content="/Public/user/images/icons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-
-     <!-- razorpay -->
+    <meta name="theme-color" content="#ffffff"> 
+    <!-- razorpay -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- razorpay -->
-
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="/Public/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/Public/user/css/plugins/owl-carousel/owl.carousel.css">
-    <link rel="stylesheet" href="/Public/user/css/plugins/magnific-popup/magnific-popup.css">
+    <!-- <link rel="stylesheet" href="/Public/user/css/plugins/magnific-popup/magnific-popup.css"> -->
     <!-- Main CSS File -->
     <link rel="stylesheet" href="/Public/user/css/style.css">
-    <link rel="stylesheet" href="assets/css/plugins/nouislider/nouislider.css">
+    <!-- <link rel="stylesheet" href="assets/css/plugins/nouislider/nouislider.css"> -->
+    <!-- ajax link  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 </head>
 
@@ -76,10 +76,11 @@
                             <li>
                                 <a href="#">Links</a>
                                 <ul>
-                                    <li><a href="tel:#"><i class=""></i></a></li>
-                                    <li><a href="/wishlist"><i class="icon-heart-o" ></i>Wishlist <span>(0)</span></a></li>
+                                    <li><a href="tel:#"><i class="icon-phone"></i>Call: +773 660 0289</a></li>
+                                    <li><a href="/wishlist"><i class="icon-heart-o"></i>Wishlist <span id="wishlist_count">(0)</span></a></li>
                                     <li><a href="about.html">About Us</a></li>
                                     <li><a href="contact.html">Contact Us</a></li>
+                                    <!-- <li><a href="contact.html"><i class="icon-user"></i>Login</a></li> -->
                                     <!-- <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li> -->
                                 </ul>
                             </li>
@@ -100,56 +101,69 @@
                             <i class="icon-bars"></i>
                         </button>
 
-                        <a href="/" class="logo">
-                            <img src="" alt="Molla Logo" width="205" height="50">
+                        <a href="index.html" class="logo">
+                            <img src="/Public/user/images/logos.png" alt="Molla Logo" width="105" height="25">
                         </a>
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrow">
-                               <% categories.forEach((data)=>{ %>             
+                                <% categories.forEach((data)=>{ %>
+                
                                 <li>
-                                    <a href="/products?catId=<%=data._id%>" class="sf-with-ul"><%= data.name%> </a>
+                                    <a href="/products?catId=<%=data._id%>" class="sf-with-ul"><%=data.name%></a>
 
                                     <div class="megamenu megamenu-sm">
                                         <div class="row no-gutters">
                                             <div class="col-md-6">
                                                 <div class="menu-col">
-                                                    <div class="menu-title"> <%= data.name%> Brands</div><!-- End .menu-title -->
+                                                    <div class="menu-title"><%=data.name%> brands</div><!-- End .menu-title -->
                                                     <ul>
-                                                        <% brands.forEach((brand)=>{ %>
+                                                        <% brands.forEach((brand)=>{%>
                                                         <li><a href="/products?catId=<%=data._id%>&brand=<%=brand%>"><%=brand%></a></li>
-                                                        <% }) %>                      
+                                                        <% }) %>
                                                     </ul>
-
-
                                                 </div><!-- End .menu-col -->
                                             </div><!-- End .col-md-6 -->
 
                                             <div class="col-md-6">
                                                 <div class="banner banner-overlay">
                                                     <a href="category.html">
-                                                        <img src="/public/user/images/menu/<%=data.name%>.jpg"  alt="Banner">
+                                                        <img src="/Public/user/images/menu/<%=data.name%>.jpg" alt="Banner">
 
                                                         <div class="banner-content banner-content-bottom">
-                                                            <div class="banner-title text-white">New Trends<br><span><strong></strong></span></div><!-- End .banner-title -->
-                                                        </div><!-- End .banner-content -->
+                                                            <div class="banner-title text-white">New Trends<br><span><strong>spring 2022</strong></span></div>End
+                                                        </div>
+                                                        <!-- End .banner-content -->
                                                     </a>
-                                                </div><!-- End .banner -->
+                                                </div>
+                                                <!-- End .banner -->
                                             </div><!-- End .col-md-6 -->
                                         </div><!-- End .row -->
                                     </div><!-- End .megamenu megamenu-sm -->
                                 </li>
-                            
-                            <% }) %> 
+                                <% }) %>
 
+                                
+
+                                
+                               
+                       
+                          
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
 
                     <div class="header-right">
-                      
+                        <div class="header-search">
+                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
                          
-
                         
                         
                            <div class="dropdown cart-dropdown">
@@ -159,7 +173,6 @@
                             </a>
 
                     </div><!-- End .header-right -->
-                   
                     <% if(user){ %>
                     <div class="dropdown cart-dropdown">
                         <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
@@ -173,20 +186,22 @@
 
                                 <div class="product">
                                     
-
                             <div class="dropdown-cart-action">
                                 <a href="/profile" class="btn btn-primary">Profile</a>
-                                <a href="#" class="btn btn-outline-primary-2"><span>Logout</span><i class="icon-long-arrow-right"></i></a>
+                                <a href="checkout.html" class="btn btn-outline-primary-2"><span>Logout</span><i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .dropdown-cart-total -->
                         </div><!-- End .dropdown-menu -->
                     </div><!-- End .cart-dropdown -->
-                    <% }else{ %>
-                        <div class="dropdown cart-dropdown">
-                        <a href="/login" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
-                            <i class="icon-user"></i><h6>login</h6>
-                            <!-- <span class="cart-count">2</span> -->
-                        </a>
-                        </div>
-                    <% } %>
+                    
+                <!-- End .container -->
             </div><!-- End .header-middle -->
+        </div>
+        <% }else{ %>
+        <div class="dropdown cart-dropdown">
+            <a href="/login" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static" >
+                <i class="icon-user"></i><h6>login</h6>
+                <!-- <span class="cart-count">2</span> -->
+            </a>
+    </div>
+    <% } %>
         </header><!-- End .header -->

@@ -4,8 +4,8 @@
             <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="widget widget-about">
-                        <img src="/Public/user/images/logoss.png" class="footer-logo" alt="Footer Logo" width="130" height="25">
-                        <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
+                        <img src="/Public/user/images/logos.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+                        
 
                         <div class="social-icons">
                             <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
@@ -67,7 +67,7 @@
         <div class="container">
             <p class="footer-copyright">Copyright © 2022 shoeMart Store. All Rights Reserved.</p><!-- End .footer-copyright -->
             <figure class="footer-payments">
-                <img src="/public/user/images/payments.png" alt="Payment methods" width="272" height="20">
+                <img src="/Public/user/images/payments.png" alt="Payment methods" width="272" height="20">
             </figure><!-- End .footer-payments -->
         </div><!-- End .container -->
     </div><!-- End .footer-bottom -->
@@ -90,48 +90,19 @@
     
     <nav class="mobile-nav">
         <ul class="mobile-menu">
-            
+            <% categories.forEach((data)=>{ %>
             <li>
-                <a href="product.html" class="sf-with-ul">Product</a>
+                <a href="/products?catId=<%=data._id%>" class="sf-with-ul"><%=data.name%></a>
                 <ul>
-                    <li><a href="product.html">Default</a></li>
-                    <li><a href="product-centered.html">Centered</a></li>
-                    <li><a href="product-extended.html"><span>Extended Info<span class="tip tip-new">New</span></span></a></li>
-                    <li><a href="product-gallery.html">Gallery</a></li>
-                    <li><a href="product-sticky.html">Sticky Info</a></li>
-                    <li><a href="product-sidebar.html">Boxed With Sidebar</a></li>
-                    <li><a href="product-fullwidth.html">Full Width</a></li>
-                    <li><a href="product-masonry.html">Masonry Sticky Info</a></li>
+                    <% brands.forEach((brand)=>{%>
+                    <li><a href="/products?catId=<%=data._id%>&brand=<%=brand%>"><%=brand%></a></li>
+                   
+                    <% }) %>
                 </ul>
             </li>
-            <li>
-                <a href="product.html" class="sf-with-ul">Product</a>
-                <ul>
-                    <li><a href="product.html">Default</a></li>
-                    <li><a href="product-centered.html">Centered</a></li>
-                    <li><a href="product-extended.html"><span>Extended Info<span class="tip tip-new">New</span></span></a></li>
-                    <li><a href="product-gallery.html">Gallery</a></li>
-                    <li><a href="product-sticky.html">Sticky Info</a></li>
-                    <li><a href="product-sidebar.html">Boxed With Sidebar</a></li>
-                    <li><a href="product-fullwidth.html">Full Width</a></li>
-                    <li><a href="product-masonry.html">Masonry Sticky Info</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="product.html" class="sf-with-ul">Product</a>
-                <ul>
-                    <li><a href="product.html">Default</a></li>
-                    <li><a href="product-centered.html">Centered</a></li>
-                    <li><a href="product-extended.html"><span>Extended Info<span class="tip tip-new">New</span></span></a></li>
-                    <li><a href="product-gallery.html">Gallery</a></li>
-                    <li><a href="product-sticky.html">Sticky Info</a></li>
-                    <li><a href="product-sidebar.html">Boxed With Sidebar</a></li>
-                    <li><a href="product-fullwidth.html">Full Width</a></li>
-                    <li><a href="product-masonry.html">Masonry Sticky Info</a></li>
-                </ul>
-            </li>
+           
             
-            
+            <% }) %>
         </ul>
     </nav><!-- End .mobile-nav -->
 
@@ -144,28 +115,23 @@
 </div><!-- End .mobile-menu-wrapper -->
 </div><!-- End .mobile-menu-container -->
 
-
-
-
-<script src="/public/user/js/script.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
-
+<script src="/Public/user/js/script.js"></script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <!-- Plugins JS File -->
-<script src="/Public/user/js/jquery.min.js"></script>
+<!-- <script src="/Public/user/js/jquery.min.js"></script> -->
 <script src="/Public/user/js/bootstrap.bundle.min.js"></script>
-<script src="/Public/user/js/jquery.hoverIntent.min.js"></script>
+<!-- <script src="/Public/user/js/jquery.hoverIntent.min.js"></script> -->
 <script src="/Public/user/js/jquery.waypoints.min.js"></script>
-<script src="/Public/user/js/superfish.min.js"></script>
+<!-- <script src="/Public/user/js/superfish.min.js"></script> -->
 <script src="/Public/user/js/owl.carousel.min.js"></script>
-<script src="/Public/user/js/bootstrap-input-spinner.js"></script>
+<!-- <script src="/Public/user/js/bootstrap-input-spinner.js"></script> -->
 <script src="/Public/user/js/jquery.elevateZoom.min.js"></script>
-<script src="/Public/user/js/bootstrap-input-spinner.js"></script>
-<script src="/Public/user/js/jquery.magnific-popup.min.js"></script>
-<script src="/Public/user/assets/js/nouislider.min.js"></script>
-<script src="/Public/user/assets/js/wNumb.js"></script>
+<!-- <script src="/Public/user/js/bootstrap-input-spinner.js"></script> -->
+<!-- <script src="/Public/user/js/jquery.magnific-popup.min.js"></script> -->
+<!-- <script src="/Public/user/assets/js/nouislider.min.js"></script> -->
+<!-- <script src="/Public/user/assets/js/wNumb.js"></script> -->
+
 <!-- Main JS File -->
 <script src="/Public/user/js/main.js"></script>
 </body>
