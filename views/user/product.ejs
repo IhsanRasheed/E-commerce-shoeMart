@@ -2,19 +2,24 @@
   
 
         <main class="main">
-        	
+        	<div class="page-header text-center" style="background-image: url('/Public/user/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title">Products</h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
                 <div class="container">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Products</li>
+                        <li class="breadcrumb-item active" aria-current="page">product</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
             <div class="page-content">
                 <div class="container">
-                	<div class="row" style="justify-content: center;" >
+                	<div class="row" style="justify-content: center;">  
+                        <!-- remember style  -->
                         
                         <!-- here filter code want to add -->
 
@@ -24,41 +29,11 @@
                 			<div class="toolbox">
                 				
 
-                				<div class="toolbox-right">
-                					
-                                    <!-- End .toolbox-sort -->
-                					<div class="toolbox-layout">
-                                        <div class="header-search">
-                                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                                            <form action="#" method="get">
-                                                <div class="header-search-wrapper">
-                                                    <label for="q" class="sr-only">Search</label>
-                                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
-                                                </div><!-- End .header-search-wrapper -->
-                                            </form>
-                                        </div><!-- End .header-search -->
 
-                						
-
-                						<!-- <a href="category.html" class="btn-layout active">
-                							<svg width="16" height="10">
-                								<rect x="0" y="0" width="4" height="4" />
-                								<rect x="6" y="0" width="4" height="4" />
-                								<rect x="12" y="0" width="4" height="4" />
-                								<rect x="0" y="6" width="4" height="4" />
-                								<rect x="6" y="6" width="4" height="4" />
-                								<rect x="12" y="6" width="4" height="4" />
-                							</svg>
-                						</a> -->
-
-                						
-                					</div><!-- End .toolbox-layout -->
-                				</div><!-- End .toolbox-right -->
                 			</div><!-- End .toolbox -->
-
-                            <div class="products mb-3">
+                            <div class="products ">
                                 <div class="row justify-content-center">
-                                   <% products.forEach((data)=>{ %>
+                                    <% products.forEach((data)=>{ %>
                                     <div class="col-6 col-md-4 col-lg-3">
                                         <div class="product product-7 text-center">
                                             <figure class="product-media">
@@ -68,13 +43,15 @@
                                                 </a>
 
                                                 <div class="product-action-vertical">
-                                                    <!-- <a href="/addtowish?id=<%=data._id%>" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a> -->
-                                                    <button  class="btn-product-icon btn-wishlist btn-expandable" onclick="addtowish('<%=data._id%>')" style="border: none;"><span>add to wishlist</span></button>
+                                                    <!-- <a href="#" onclick="addToWishlist('<%=data._id%>')" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a> -->
+													<button onclick="addToWishlist('<%=data._id%>')" style="border: none;" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></button>
 
+                                                    <!-- <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a> -->
                                                 </div><!-- End .product-action-vertical -->
 
                                                 <div class="product-action">
-                                                    <!-- <a href="/addtocart?id=<%=data._id%>" class="btn-product btn-cart"><span>add to cart</span></a> -->
+                                                    <!-- <a href="#" class="btn-product btn-cart" onclick="addToCart('<%=data._id%>')"><span>add to cart</span></a> -->
 													<button class="btn-product btn-cart" style="border: none;" onclick="add_to_cart('<%=data._id%>')"> <span>add to cart</span></button>
                                                 </div><!-- End .product-action -->
                                             </figure><!-- End .product-media -->
@@ -83,47 +60,35 @@
                                                 <div class="product-cat">
                                                     <!-- <a href="#">Women</a> -->
                                                 </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="/products-details"><%=data.name%></a></h3><!-- End .product-title -->
+                                                <h3 class="product-title"><a href="/product-details?id=<%=data._id%>"><%=data.name%></a></h3><!-- End .product-title -->
                                                 <div class="product-price">
-                                                     $ <%=data.price%>
+                                                    $<%=data.price%>
                                                 </div><!-- End .product-price -->
-                                                
-                                                <!-- End .product-nav -->
+                                               
                                             </div><!-- End .product-body -->
                                         </div><!-- End .product -->
                                     </div><!-- End .col-sm-6 col-lg-4 -->
                                     <% }) %>
+                                  
+
+
+                             
+
+
+
 								</div><!-- End .row -->
                             </div><!-- End .products -->
-
 
 							
 
 			
 
-                			<nav aria-label="Page navigation">
-							    <ul class="pagination justify-content-center">
-							        <li class="page-item disabled">
-							            <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-							                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-							            </a>
-							        </li>
-							        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-							        <li class="page-item"><a class="page-link" href="#">2</a></li>
-							        <li class="page-item"><a class="page-link" href="#">3</a></li>
-							        <li class="page-item-total">of 6</li>
-							        <li class="page-item">
-							            <a class="page-link page-link-next" href="#" aria-label="Next">
-							                Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-							            </a>
-							        </li>
-							    </ul>
-							</nav>
+                			
                 		</div><!-- End .col-lg-9 -->
                 
                 	</div><!-- End .row -->
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
-
+		<script src="/Public/user/js/script.js"></script>
         <%-include('../layouts/user-footer.ejs') %>
