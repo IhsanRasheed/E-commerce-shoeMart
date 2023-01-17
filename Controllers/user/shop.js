@@ -221,32 +221,6 @@ const cartDelete = async (req, res) => {
   }
 }
 
-// const productQtyAdd = async (req, res) => {
-//   try {
-//     let id = req.query.id;
-//     await cartModel.updateOne(
-//       { userId: req.session.user, "cartItem.productId": id },
-//       { $inc: { "cartItem.$.qty": 1 } }
-//     );
-//     res.redirect("/cart");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const productQtySub = async (req, res) => {
-//   try {
-//     let id = req.query.id;
-//     await cartModel.updateOne(
-//       { userId: req.session.user, "cartItem.productId": id },
-//       { $inc: { "cartItem.$.qty": -1 } }
-//     );
-//     res.redirect("/cart");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 const userWishlist = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.session.user })
@@ -345,18 +319,6 @@ const wishDelete = async (req, res) => {
   }
 }
 
-// const checkout =  async (req,res) => {
-//   try{
-//     const user = await userModel.findOne({_id:req.session.user})
-//     const brands = await productModel.distinct('brand')
-//     const categories = await categoryModel.find({ status: true })
-
-//     res.render('user/checkout',{ user,brands, categories})
-//   }catch(error){
-//     console.log(error)
-//   }
-// }
-
 // let subtotal;
 const checkOut = async (req, res) => {
   try {
@@ -438,7 +400,7 @@ const checkOut = async (req, res) => {
 
 const postCheckOut = async (req, res) => {
   try {
-    if (req.body.payment_mode == 'COD') {
+    if (req.body.payment_mode === 'COD') {
       const productData = await cartModel.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: '$cartItem' },
@@ -504,8 +466,8 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'COD'
         })
         await orderDetails.save()
-        res.redirect('/')
-        // res.json({CODSuccess:true})
+        await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
+        res.redirect('/success')
       } else {
         await couponModel.updateOne({ _id: req.body.couponid }, { $push: { users: { userId: req.session.user } } })
         const orderDetails = new order({
@@ -527,11 +489,10 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'COD'
         })
         await orderDetails.save()
-        res.redirect('/')
-        // res.json({CODSuccess:true})
+        res.redirect('/success')
       }
     }
-    if (req.body.payment_mode == 'pay') {
+    if (req.body.payment_mode === 'pay') {
       const productData = await cartModel.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: '$cartItem' },
@@ -713,40 +674,6 @@ paypal.configure({
   client_secret:
     'EH9yBhfpuT8SPBR4RmcYgoZIgOp8eQwlazFXkedrqzfoIryDRBXmu9smKZFqSZM46VlLOYXLrnZ03Fg4'
 })
-
-// const verifyPayment= async (req, res) => {
-//   try{
-//     const details = req.body;
-//     let orderDetails=req.body.orderDetails
-//     let hmac = crypto.createHmac("sha256", process.env.KEYSECRET);
-//     hmac.update(details.payment.razorpay_order_id + "|" + details.payment.razorpay_payment_id);
-//     hmac = hmac.digest("hex");
-
-//     if (hmac == details.payment.razorpay_signature) {
-//       if ( 'couponUsed' in orderDetails){
-//         await coupon.updateOne({_id:orderDetails.couponUsed}, { $push: { users: { userId:req.session.user} } })
-
-//       orderDetails=new order(orderDetails)
-//         await orderDetails.save()
-//       res.json({success:true})
-//       }else{
-//       let productDetails=orderDetails.orderItems
-//         for(let i =0;i<productDetails.length;i++){
-//             await product.updateOne({_id:productDetails[i]},{$inc:{stock:-(productDetails.quantity[i])}})
-//         }
-//         console.log(productDetails);
-//         orderDetails=new order(orderDetails)
-//         await orderDetails.save()
-//         res.json({success:true})
-//       }
-//     } else {
-//       console.log(err);
-//       res.json({ failed:true});
-//     }
-//   }catch(error){
-//     console.log(error)
-//   }
-//   }
 
 const setAddressCheckout = async (req, res) => {
   try {
