@@ -303,13 +303,12 @@ const addWishlist = async (req, res) => {
 
 const wishDelete = async (req, res) => {
   try {
-    // let email = "ajmal@gmail.com";
-    // let userId = await customer.findOne({ email: email });
+    const proId = req.body.proId
     await wishListModel.updateOne(
       { userId: req.session.user },
-      { $pull: { wishList: { productId: req.query.id } } }
+      { $pull: { wishList: { productId: proId } } }
     )
-    res.redirect('/wishlist')
+    res.json({ success: true })
   } catch (error) {
     console.log(error)
   }
@@ -463,6 +462,11 @@ const postCheckOut = async (req, res) => {
         })
         await orderDetails.save()
         await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
+        const productDetails = productData
+        console.log(productDetails)
+        for (let i = 0; i < productDetails.length; i++) {
+          await productModel.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+        }
         res.redirect('/success')
       } else {
         await couponModel.updateOne({ _id: req.body.couponid }, { $push: { users: { userId: req.session.user } } })

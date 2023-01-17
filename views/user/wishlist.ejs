@@ -13,7 +13,8 @@
 
     <div class="page-content">
         <div class="container">
-            <table class="table table-wishlist table-mobile">
+             <table class="table table-wishlist table-mobile" id="table">
+                
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -35,9 +36,7 @@
                                     </a>
                                 </figure>
 
-                                <h3 class="product-title">
-                                    <a href="#">Blue utility pinafore denim dress</a>
-                                </h3><!-- End .product-title -->
+                              
                             </div><!-- End .product -->
                         </td>
                         <td class="price-col">$ <%=data.price%></td>
@@ -45,7 +44,8 @@
                         <td class="action-col">
                             <button class="btn btn-block btn-outline-primary-2"> <a href="/addtocart?id=<%=data.id%>"> <i class="icon-cart-plus"></i>Add to Cart</button></a>
                         </td>
-                        <td class="remove-col"><a href="/wish-item-delete?id=<%=data.id%>"><button class="btn-remove"><i class="icon-close"></i></button></a></td>
+                        <!-- <td class="remove-col"><a href="/wish-item-delete?id=<%=data.id%>"><button class="btn-remove"><i class="icon-close"></i></button></a></td> -->
+                        <td class="remove-col"><button class="btn-remove" onclick="deletewish('<%=data.id%>')"><i class="icon-close"></i></button></td>
                     </tr>
                     <%})%>
                     

@@ -46,7 +46,7 @@ router.post('/setaddress', session.isLogin, shop.setAddressCheckout)
 // Cart
 router.get('/cart', session.isLogin, shop.userCart)
 // router.get('/addtocart',session.isLogin,shop.addToCart)
-router.post('/add_to_cart', session.isLogin, shop.addtocart)
+router.post('/addtocart', session.isLogin, shop.addtocart)
 router.patch('/productadd', session.isLogin, shop.productQtyAdd)
 router.patch('/productsub', session.isLogin, shop.productQtySub)
 router.get('/cart-item-delete', session.isLogin, shop.cartDelete)
@@ -54,7 +54,8 @@ router.get('/cart-item-delete', session.isLogin, shop.cartDelete)
 // Wishlist
 router.get('/wishlist', session.isLogin, shop.userWishlist)
 router.post('/addtowish', session.isLogin, shop.addWishlist)
-router.get('/wish-item-delete', session.isLogin, shop.wishDelete)
+// router.get('/wish-item-delete', session.isLogin, shop.wishDelete)
+router.delete('/wishlist', session.isLogin, shop.wishDelete)
 
 // Checkout
 router.get('/checkout', session.isLogin, shop.checkOut)

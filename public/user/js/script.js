@@ -1,7 +1,7 @@
 
 function addtocart (proId) {
   $.ajax({
-    url: '/add_to_cart',
+    url: '/addtocart',
     method: 'post',
     data: {
       Id: proId
@@ -133,7 +133,7 @@ function subQty (proId, position) {
         Swal.fire({
           position: 'center',
           icon: 'warning',
-          title: 'Limit Exist..!',
+          title: 'Minimum one required!',
           showConfirmButton: false,
           timer: 1500
         })
@@ -172,6 +172,22 @@ function addtowish (prodId) {
         $('#wishlit_count').html(count)
       }
     }
+  })
+}
+
+function deletewish (proId) {
+  $.ajax({
+    url: '/wishlist',
+    method: 'delete',
+    data: {
+      proId
+    },
+    success: (res) => {
+      if (res.success) {
+        $('#table').load(location.href + ' #table')
+      }
+    }
+
   })
 }
 
@@ -268,70 +284,70 @@ function couponCheck (event) {
 //   })
 // })
 
-const form = document.querySelector('.form')
-form.addEventListener('submit', async event => {
-  event.preventDefault()
-  const formData = new FormData(form)
-  const payment = formData.get('paymentMethode')
-  const response = await fetch('http://localhost:4000/checkout', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      payment
-    })
-  })
-  const orderData = await response.json()
-  console.log(orderData)
-  if (orderData.success === false) {
-    location.href = orderData.url
-  } else {
-    const options = {
-      key: 'rzp_test_2xERoSusyd4f84', // Enter the Key ID generated from the Dashboard
-      amount: orderData.amount * 100,
-      currency: 'INR',
-      name: 'Acme Corp',
-      order_id: orderData.id,
-      handler: function (response) {
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
-        location.href = orderData.url
-      }
-    }
-    const rzp1 = new Razorpay(options)
-    rzp1.open()
-  }
-})
+// const form = document.querySelector('.form')
+// form.addEventListener('submit', async event => {
+//   event.preventDefault()
+//   const formData = new FormData(form)
+//   const payment = formData.get('paymentMethode')
+//   const response = await fetch('http://localhost:4000/checkout', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({
+//       payment
+//     })
+//   })
+//   const orderData = await response.json()
+//   console.log(orderData)
+//   if (orderData.success === false) {
+//     location.href = orderData.url
+//   } else {
+//     const options = {
+//       key: 'rzp_test_2xERoSusyd4f84', // Enter the Key ID generated from the Dashboard
+//       amount: orderData.amount * 100,
+//       currency: 'INR',
+//       name: 'Acme Corp',
+//       order_id: orderData.id,
+//       handler: function (response) {
+//         // alert(response.razorpay_payment_id);
+//         // alert(response.razorpay_order_id);
+//         // alert(response.razorpay_signature);
+//         location.href = orderData.url
+//       }
+//     }
+//     const rzp1 = new Razorpay(options)
+//     rzp1.open()
+//   }
+// })
 
-function razorPay (order, orderDetails) {
-  const options = {
-    key: 'rzp_test_pTxoFkiwXZuGgu', // Enter the Key ID generated from the Dashboard
-    amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    currency: 'INR',
-    name: 'TechKart',
-    description: 'Test Transaction',
-    image: 'https://example.com/your_logo',
-    order_id: order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    handler: function (response) {
-      verifyPayment(response, order, orderDetails)
-    },
-    prefill: {
-      name: 'Abdulla',
-      email: 'sapabdu@gmail.com',
-      contact: '9999999999'
-    },
-    notes: {
-      address: 'Razorpay Corporate Office'
-    },
-    theme: {
-      color: '#3399cc'
-    }
-  }
-  const rzp1 = new Razorpay(options)
-  rzp1.on('payment.failed', function (response) {
-    location.href = '/payment_fail'
-  })
-  rzp1.open()
-}
+// function razorPay (order, orderDetails) {
+//   const options = {
+//     key: 'rzp_test_pTxoFkiwXZuGgu', // Enter the Key ID generated from the Dashboard
+//     amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+//     currency: 'INR',
+//     name: 'TechKart',
+//     description: 'Test Transaction',
+//     image: 'https://example.com/your_logo',
+//     order_id: order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+//     handler: function (response) {
+//       verifyPayment(response, order, orderDetails)
+//     },
+//     prefill: {
+//       name: 'Abdulla',
+//       email: 'sapabdu@gmail.com',
+//       contact: '9999999999'
+//     },
+//     notes: {
+//       address: 'Razorpay Corporate Office'
+//     },
+//     theme: {
+//       color: '#3399cc'
+//     }
+//   }
+//   const rzp1 = new Razorpay(options)
+//   rzp1.on('payment.failed', function (response) {
+//     location.href = '/payment_fail'
+//   })
+//   rzp1.open()
+// }
