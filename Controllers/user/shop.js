@@ -165,16 +165,12 @@ const productQtyAdd = async (req, res) => {
     const proId = data.Id
     const qty = parseInt(data.qty)
     const productData = await productModel.findOne({ _id: proId })
-    if (productData.stock > 0) {
-      if (qty < 10) {
-        const price = productData.price
-        await cartModel.updateOne(
-          { userId: req.session.user, 'cartItem.productId': proId },
-          { $inc: { 'cartItem.$.qty': 1 } })
-        res.json({ price })
-      } else {
-        res.json({ limit: true })
-      }
+    if (productData.stock > qty) {
+      const price = productData.price
+      await cartModel.updateOne(
+        { userId: req.session.user, 'cartItem.productId': proId },
+        { $inc: { 'cartItem.$.qty': 1 } })
+      res.json({ price })
     } else {
       res.json({ outStock: true })
     }
