@@ -6,8 +6,6 @@ const wishListModel = require('../../Model/wishlistModel')
 const couponModel = require('../../Model/couponModel')
 const order = require('../../Model/orderModel')
 const mongoose = require('mongoose')
-const instance = require('../../middleware/razorpay')
-const crypto = require('crypto')
 const paypal = require('paypal-rest-sdk')
 
 const userCart = async (req, res) => {
@@ -66,44 +64,6 @@ const userCart = async (req, res) => {
     console.log(error)
   }
 }
-
-// const addToCart = async (req, res) => {
-//   try {
-//     const id = req.query.id;
-//     let exist1 = await cartModel.aggregate([
-//       {
-//         $match: {
-//           $and: [
-//             { userId: mongoose.Types.ObjectId(req.session.user) },
-//             {
-//               cartItem: {
-//                 $elemMatch: { productId: new mongoose.Types.ObjectId(id) },
-//               },
-//             },
-//           ],
-//         },
-//       },
-//     ]);
-//     console.log(exist1);
-
-//     if (exist1.length === 0) {
-//       await cartModel.updateOne(
-//         { userId: req.session.user },
-//         { $push: { cartItem: { productId: id } } },
-//         { upsert: true }
-//       );
-//       res.redirect("/cart");
-//     } else {
-//       await cartModel.updateOne(
-//         { "cartItem.productId": id },
-//         { $inc: { "cartItem.$.qty": 1 } }
-//       );
-//       res.redirect("/cart");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const addtocart = async (req, res) => {
   try {
@@ -314,13 +274,8 @@ const wishDelete = async (req, res) => {
   }
 }
 
-// let subtotal;
 const checkOut = async (req, res) => {
   try {
-    // let cartItems=req.query.cartItems
-    // subtotal = req.query.subtotal;
-    // console.log(cartItems);
-    // console.log(subtotal);
     const cartItems = await cartModel.aggregate([
       { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: '$cartItem' },
@@ -463,7 +418,6 @@ const postCheckOut = async (req, res) => {
         await orderDetails.save()
         await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
         const productDetails = productData
-        console.log(productDetails)
         for (let i = 0; i < productDetails.length; i++) {
           await productModel.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
         }
