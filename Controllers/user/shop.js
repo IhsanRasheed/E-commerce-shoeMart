@@ -6,8 +6,8 @@ const wishListModel = require('../../Model/wishlistModel')
 const couponModel = require('../../Model/couponModel')
 const order = require('../../Model/orderModel')
 const mongoose = require('mongoose')
-// const instance = require('../../middleware/razorpay')
-// const crypto = require('crypto')
+const instance = require('../../middleware/razorpay')
+const crypto = require('crypto')
 const paypal = require('paypal-rest-sdk')
 
 const userCart = async (req, res) => {
@@ -66,6 +66,44 @@ const userCart = async (req, res) => {
     console.log(error)
   }
 }
+
+// const addToCart = async (req, res) => {
+//   try {
+//     const id = req.query.id;
+//     let exist1 = await cartModel.aggregate([
+//       {
+//         $match: {
+//           $and: [
+//             { userId: mongoose.Types.ObjectId(req.session.user) },
+//             {
+//               cartItem: {
+//                 $elemMatch: { productId: new mongoose.Types.ObjectId(id) },
+//               },
+//             },
+//           ],
+//         },
+//       },
+//     ]);
+//     console.log(exist1);
+
+//     if (exist1.length === 0) {
+//       await cartModel.updateOne(
+//         { userId: req.session.user },
+//         { $push: { cartItem: { productId: id } } },
+//         { upsert: true }
+//       );
+//       res.redirect("/cart");
+//     } else {
+//       await cartModel.updateOne(
+//         { "cartItem.productId": id },
+//         { $inc: { "cartItem.$.qty": 1 } }
+//       );
+//       res.redirect("/cart");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const addtocart = async (req, res) => {
   try {
@@ -183,6 +221,32 @@ const cartDelete = async (req, res) => {
   }
 }
 
+// const productQtyAdd = async (req, res) => {
+//   try {
+//     let id = req.query.id;
+//     await cartModel.updateOne(
+//       { userId: req.session.user, "cartItem.productId": id },
+//       { $inc: { "cartItem.$.qty": 1 } }
+//     );
+//     res.redirect("/cart");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// const productQtySub = async (req, res) => {
+//   try {
+//     let id = req.query.id;
+//     await cartModel.updateOne(
+//       { userId: req.session.user, "cartItem.productId": id },
+//       { $inc: { "cartItem.$.qty": -1 } }
+//     );
+//     res.redirect("/cart");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 const userWishlist = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.session.user })
@@ -236,9 +300,9 @@ const addWishlist = async (req, res) => {
     const wish = await wishListModel.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
     if (wish) {
       const wishlistEx = wish.wishList.findIndex((wishList) =>
-        wishList.productId === id
+        wishList.productId == id
       )
-      if (wishlistEx !== -1) {
+      if (wishlistEx != -1) {
         res.json({ wish: true })
       } else {
         const dataPush = await wishListModel.updateOne({ userId: mongoose.Types.ObjectId(req.session.user) },
@@ -256,7 +320,7 @@ const addWishlist = async (req, res) => {
         wishList: [{ productId: id }]
       })
       await addWishlist.save()
-      const wishlistData = await wishListModel.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
+      const wishlistData = await wishlist.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
       const count = wishlistData.wishList.length
       res.json({ success: true, count })
     }
@@ -280,6 +344,18 @@ const wishDelete = async (req, res) => {
     console.log(error)
   }
 }
+
+// const checkout =  async (req,res) => {
+//   try{
+//     const user = await userModel.findOne({_id:req.session.user})
+//     const brands = await productModel.distinct('brand')
+//     const categories = await categoryModel.find({ status: true })
+
+//     res.render('user/checkout',{ user,brands, categories})
+//   }catch(error){
+//     console.log(error)
+//   }
+// }
 
 // let subtotal;
 const checkOut = async (req, res) => {
@@ -362,7 +438,7 @@ const checkOut = async (req, res) => {
 
 const postCheckOut = async (req, res) => {
   try {
-    if (req.body.payment_mode === 'COD') {
+    if (req.body.payment_mode == 'COD') {
       const productData = await cartModel.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: '$cartItem' },
@@ -428,8 +504,8 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'COD'
         })
         await orderDetails.save()
-        await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
-        res.redirect('/success')
+        res.redirect('/')
+        // res.json({CODSuccess:true})
       } else {
         await couponModel.updateOne({ _id: req.body.couponid }, { $push: { users: { userId: req.session.user } } })
         const orderDetails = new order({
@@ -451,11 +527,11 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'COD'
         })
         await orderDetails.save()
-        await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
-        res.redirect('/success')
+        res.redirect('/')
+        // res.json({CODSuccess:true})
       }
     }
-    if (req.body.payment_mode === 'pay') {
+    if (req.body.payment_mode == 'pay') {
       const productData = await cartModel.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: '$cartItem' },
@@ -521,9 +597,10 @@ const postCheckOut = async (req, res) => {
           totalAmount: subtotal,
           paymentMethod: 'online Payment'
         })
+        await orderDetails.save()
 
-        // await orderDetails.save()
-        const total = parseInt(subtotal)
+        var totals = subtotal
+        const total = parseInt(totals)
         const create_payment_json = {
           intent: 'sale',
           payer: {
@@ -581,9 +658,9 @@ const postCheckOut = async (req, res) => {
           totalAmount: req.body.total,
           paymentMethod: 'COD'
         })
-
         await orderDetails.save()
-        const totals = subtotal * 0.012
+
+        var totals = subtotal * 0.012
         const total = parseInt(totals)
         const create_payment_json = {
           intent: 'sale',
@@ -631,9 +708,45 @@ const postCheckOut = async (req, res) => {
 
 paypal.configure({
   mode: 'sandbox', // sandbox or live
-  client_id: process.env.clientId,
-  client_secret: process.env.clientSecret
+  client_id:
+    'AcXskD-_4tOiV4Jc9j0_AHbDQSkNbN_kH2zntIQeGdrwI5oSYZvQZWh9EzixiiKaBTWA_zzzLexd-jhv',
+  client_secret:
+    'EH9yBhfpuT8SPBR4RmcYgoZIgOp8eQwlazFXkedrqzfoIryDRBXmu9smKZFqSZM46VlLOYXLrnZ03Fg4'
 })
+
+// const verifyPayment= async (req, res) => {
+//   try{
+//     const details = req.body;
+//     let orderDetails=req.body.orderDetails
+//     let hmac = crypto.createHmac("sha256", process.env.KEYSECRET);
+//     hmac.update(details.payment.razorpay_order_id + "|" + details.payment.razorpay_payment_id);
+//     hmac = hmac.digest("hex");
+
+//     if (hmac == details.payment.razorpay_signature) {
+//       if ( 'couponUsed' in orderDetails){
+//         await coupon.updateOne({_id:orderDetails.couponUsed}, { $push: { users: { userId:req.session.user} } })
+
+//       orderDetails=new order(orderDetails)
+//         await orderDetails.save()
+//       res.json({success:true})
+//       }else{
+//       let productDetails=orderDetails.orderItems
+//         for(let i =0;i<productDetails.length;i++){
+//             await product.updateOne({_id:productDetails[i]},{$inc:{stock:-(productDetails.quantity[i])}})
+//         }
+//         console.log(productDetails);
+//         orderDetails=new order(orderDetails)
+//         await orderDetails.save()
+//         res.json({success:true})
+//       }
+//     } else {
+//       console.log(err);
+//       res.json({ failed:true});
+//     }
+//   }catch(error){
+//     console.log(error)
+//   }
+//   }
 
 const setAddressCheckout = async (req, res) => {
   try {
@@ -668,7 +781,6 @@ const success = async (req, res) => {
   const user = await userModel.findOne({ _id: req.session.user })
   const brands = await productModel.distinct('brand')
   const categories = await categoryModel.find({ status: true })
-  console.log(req.query)
   res.render('user/success', { user, brands, categories })
 }
 

@@ -24,7 +24,28 @@ const error = async (req, res) => {
   const order = await orderModel.find({ userId: req.session.user })
   res.render('user/error404', { user, categories, brands, order })
 }
-
+const search = async (req, res) => {
+  try {
+    const user = await userModel.findOne({ _id: req.session.user })
+    const categories = await categoryModel.find({ status: true })
+    const brands = await productModel.distinct('brand')
+    const key = req.body.search
+    console.log(key)
+    const products = await productModel.find({
+      $or: [
+        { name: new RegExp(key, 'i') }
+        // { category: new RegExp(key, "i") },
+      ]
+    })
+    if (products.length) {
+      res.render('user/product', { user, categories, brands, products })
+    } else {
+      res.render('user/product', { user, categories, brands, products, message: 'Ooops ...! No Match' })
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 const product = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.session.user })
@@ -218,85 +239,10 @@ const addressDefault = async (req, res) => {
   res.redirect('/profile')
 }
 
-// const userCart = async (req, res) => {
-//   try {
-//     const brands = await productModel.distinct('brand')
-//     const categories = await categoryModel.find({ status: true })
-//     const email = 'ajmal@gmail.com'
-//     const userId = await userModel.findOne({ email })
-//     const cartItems = await cartModel.aggregate([
-//       { $match: { userId: userId._id } },
-//       { $unwind: '$cartItem' },
-//       {
-//         $project: {
-//           productId: '$cartItem.productId',
-//           qty: '$cartItem.qty'
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'products',
-//           localField: 'productId',
-//           foreignField: '_id',
-//           as: 'productDetails'
-//         }
-//       },
-//       { $unwind: '$productDetails' },
-//       {
-//         $project: {
-//           name: '$productDetails.name',
-//           price: '$productDetails.price',
-//           image: '$productDetails.image',
-//           qty: '$qty',
-//           id: '$productDetails._id'
-//         }
-//       },
-//       {
-//         $addFields: {
-//           total: { $multiply: ['$price', '$qty'] }
-//         }
-//       }
-//     ])
-//     console.log(cartItems)
-//     res.render('../views/user/cart.ejs', { brands, categories, cartItems })
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// const addToCart = async (req, res) => {
-//   try {
-//     const email = 'ajmal@gmail.com'
-//     const id = req.query.id
-//     // console.log(id)
-//     const userId = await userModel.findOne({ email })
-//     console.log(userId._id)
-//     const exist = await cartModel.find({
-//       cartItem: { $elemMatch: { productId: id } }
-//     })
-//     console.log(exist)
-//     if (exist.length === 0) {
-//       await cartModel.updateOne(
-//         { userId: userId._id },
-
-//         { $push: { cartItem: { productId: id } } }
-//       )
-//       res.redirect('/cart')
-//     } else {
-//       await cartModel.updateOne(
-//         { 'cartItem.productId': id },
-//         { $inc: { 'cartItem.$.qty': 1 } }
-//       )
-//       res.redirect('/cart')
-//     }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
 module.exports = {
   home,
   error,
+  search,
   product,
   productDetails,
   profile,
@@ -306,6 +252,5 @@ module.exports = {
   addressEdit,
   addressPost,
   addressDefault
-  // userCart,
-  // addToCart
+
 }

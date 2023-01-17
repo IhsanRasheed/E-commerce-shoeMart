@@ -26,6 +26,9 @@ router.get('/', user.home)
 // Error
 router.get('/404', user.error)
 
+// Search
+router.post('/search', session.isLogin, user.search)
+
 // Products
 router.get('/products', user.product)
 router.get('/products-details', user.productDetails)
