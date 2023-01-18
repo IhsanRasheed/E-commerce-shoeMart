@@ -15,61 +15,60 @@ const salesPage = async (req, res) => {
   }
 }
 
-const PDFdata = async (req, res) => {
+const postPDFData = async (req, res) => {
   try {
+  //  console.log(req.body)
     const salesDate = req.body
-    // console.log(salesDate)
     const startDate = new Date(salesDate.from)
     const endDate = new Date(salesDate.to)
-    // console.log(startDate)
-    // console.log(endDate)
     const dateFrom = moment(salesDate.from).format('DD/MM/YYYY')
     const dateto = moment(salesDate.to).format('DD/MM/YYYY')
-    // console.log(dateFrom)
-    // console.log(dateto)
+    //  console.log(dateFrom+"dd"+dateto)
     const orderData = await orderModel.find(
       { $and: [{ orderDate: { $gte: startDate, $lte: endDate } }, { orderStatus: 'delivered' }] })
-    // console.log(orderData)
+    //  console.log(orderData);
     const total = orderData.reduce((acc, curr) => {
       acc = acc + curr.totalAmount
       return acc
     }, 0)
-    // console.log(total)
-    const data = {
+    // const data = {
+    //   orderData,
+    //   total,
+    //   dateFrom,
+    //   dateto
+    // }
+    res.render('admin/pdfDownload', {
       orderData,
       total,
       dateFrom,
       dateto
-    }
-    // console.log(data)
-    const option = {
-      format: 'A4',
-      border: '20px'
-    }
-    // console.log(option)
-    const filePath = path.resolve(__dirname, '../../views/admin/pdfDownload.ejs')
-    const htmlString = fs.readFileSync(filePath).toString()
-    const ejsData = ejs.render(htmlString, data)
-    pdf.create(ejsData, option).toFile('salesReport.pdf', (err, file) => {
-      if (err) {
-        console.log(err)
-      }
-
-      // console.log('pdf')
-      // const filePath = path.resolve(__dirname, 'sales.pdf')
-      // fs.readFile(filePath, (err, file) => {
-      //   if (err) {
-      //     console.log(err)
-      //   }
-
-      //   res.setHeader('Content-Type', 'application/pdf')
-      //   res.setHeader('Content-Disposition', 'attachement;filename="salesReport.pdf"')
-      //   res.send(file)
-      //   console.log('pdf generated')
-      // })
     })
+    // const option = {
+    //   format: 'A4',
+    //   border: '20px'
+    // }
+    // const filePath = path.resolve(__dirname, 'pdfDownload.ejs')
+    // const htmlString = fs.readFileSync(filePath).toString()
+    // const ejsData = ejs.render(htmlString, data)
+    // pdf.create(ejsData, option).toFile('sales_report.pdf', (err, file) => {
+    //   if (err) {
+    //     console.log(err)
+    //   }
 
-    //   console.log(orderData);
+    //   console.log('pdf')
+
+    //   const filePath = path.resolve(__dirname, 'sales_report.pdf')
+    //   fs.readFile(filePath, (err, file) => {
+    //     if (err) {
+    //       console.log(err)
+    //     }
+
+    //     res.setHeader('Content-Type', 'application/pdf')
+    //     res.setHeader('Content-Disposition', 'attachement;filename="sales_report.pdf"')
+    //     res.send(file)
+    //     console.log('pdf generated')
+    //   })
+    // })
   } catch (error) {
     console.log(error)
   }
@@ -77,5 +76,6 @@ const PDFdata = async (req, res) => {
 
 module.exports = {
   salesPage,
-  PDFdata
+  postPDFData
+
 }
