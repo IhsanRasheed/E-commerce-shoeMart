@@ -50,24 +50,23 @@ const PDFdata = async (req, res) => {
     const filePath = path.resolve(__dirname, '../../views/admin/pdfDownload.ejs')
     const htmlString = fs.readFileSync(filePath).toString()
     const ejsData = ejs.render(htmlString, data)
-    pdf.create(ejsData, option).toFile('sales_report.pdf', (err, file) => {
+    pdf.create(ejsData, option).toFile('salesReport.pdf', (err, file) => {
       if (err) {
         console.log(err)
       }
 
       console.log('pdf')
+      const filePath = path.resolve(__dirname, 'sales.pdf')
+      fs.readFile(filePath, (err, file) => {
+        if (err) {
+          console.log(err)
+        }
 
-      //   const filePath = path.resolve(__dirname, '../../public/admin/sales_report.pdf')
-      //   fs.readFile(filePath, (err, file) => {
-      //     if (err) {
-      //       console.log(err)
-      //     }
-
-    //     res.setHeader('Content-Type', 'application/pdf')
-    //     res.setHeader('Content-Disposition', 'attachement;filename="sales_report.pdf"')
-    //     res.send(file)
-    //     console.log('pdf generated')
-    //   })
+        res.setHeader('Content-Type', 'application/pdf')
+        res.setHeader('Content-Disposition', 'attachement;filename="salesReport.pdf"')
+        res.send(file)
+        console.log('pdf generated')
+      })
     })
 
     //   console.log(orderData);

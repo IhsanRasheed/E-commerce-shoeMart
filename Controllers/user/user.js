@@ -24,6 +24,7 @@ const error = async (req, res) => {
   const order = await orderModel.find({ userId: req.session.user })
   res.render('user/error404', { user, categories, brands, order })
 }
+
 const search = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.session.user })
@@ -46,6 +47,7 @@ const search = async (req, res) => {
     console.log(error)
   }
 }
+
 const product = async (req, res) => {
   try {
     const user = await userModel.findOne({ _id: req.session.user })
