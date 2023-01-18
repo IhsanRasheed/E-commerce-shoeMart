@@ -15,7 +15,7 @@ const management = async (req, res) => {
         }
       }
     ])
-    // console.log(products[4].catData[0])
+    console.log(products)
     res.render('admin/productManagement.ejs', { products, categories })
   } catch (error) {
     console.log(error)
