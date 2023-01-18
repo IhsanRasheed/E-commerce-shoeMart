@@ -15,8 +15,7 @@ const add = async (req, res) => {
     res.redirect('/admin/category?wrong=category already exist')
   } else {
     const newCategory = categoryModel({
-      name: categoryName,
-      image:
+      name: categoryName
     })
     newCategory.save()
     res.redirect('/admin/category')
