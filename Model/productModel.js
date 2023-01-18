@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
   },
   image: [
     {
-    filename:String
+      filename: String
     }
   ],
   status: {

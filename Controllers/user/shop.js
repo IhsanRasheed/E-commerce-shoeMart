@@ -227,30 +227,30 @@ const userWishlist = async (req, res) => {
 const addWishlist = async (req, res) => {
   try {
     const id = req.body.prodId
+    const userId = req.session.user
     const wish = await wishListModel.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
     if (wish) {
       const wishlistEx = wish.wishList.findIndex((wishList) =>
-        wishList.productId == id
+        wishList.productId === id
       )
-      if (wishlistEx != -1) {
+      if (wishlistEx !== -1) {
         res.json({ wish: true })
       } else {
-        const dataPush = await wishListModel.updateOne({ userId: mongoose.Types.ObjectId(req.session.user) },
+        await wishListModel.updateOne({ userId: mongoose.Types.ObjectId(req.session.user) },
           {
             $push: { wishList: { productId: id } }
           })
         const wishlistData = await wishListModel.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
         const count = wishlistData.wishList.length
-        console.log(count)
         res.json({ success: true, count })
       }
     } else {
-      const addWish = new wishlist({
+      const addWish = new wishListModel({
         userId,
         wishList: [{ productId: id }]
       })
-      await addWishlist.save()
-      const wishlistData = await wishlist.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
+      await addWish.save()
+      const wishlistData = await wishListModel.findOne({ userId: mongoose.Types.ObjectId(req.session.user) })
       const count = wishlistData.wishList.length
       res.json({ success: true, count })
     }

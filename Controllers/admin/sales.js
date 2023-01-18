@@ -55,18 +55,18 @@ const PDFdata = async (req, res) => {
         console.log(err)
       }
 
-      console.log('pdf')
-      const filePath = path.resolve(__dirname, 'sales.pdf')
-      fs.readFile(filePath, (err, file) => {
-        if (err) {
-          console.log(err)
-        }
+      // console.log('pdf')
+      // const filePath = path.resolve(__dirname, 'sales.pdf')
+      // fs.readFile(filePath, (err, file) => {
+      //   if (err) {
+      //     console.log(err)
+      //   }
 
-        res.setHeader('Content-Type', 'application/pdf')
-        res.setHeader('Content-Disposition', 'attachement;filename="salesReport.pdf"')
-        res.send(file)
-        console.log('pdf generated')
-      })
+      //   res.setHeader('Content-Type', 'application/pdf')
+      //   res.setHeader('Content-Disposition', 'attachement;filename="salesReport.pdf"')
+      //   res.send(file)
+      //   console.log('pdf generated')
+      // })
     })
 
     //   console.log(orderData);
