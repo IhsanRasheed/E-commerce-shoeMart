@@ -522,8 +522,8 @@ const postCheckOut = async (req, res) => {
             payment_method: 'paypal'
           },
           redirect_urls: {
-            return_url: 'http://localhost:4000/success',
-            cancel_url: 'http://localhost:4000/failed'
+            return_url: 'http://shoemart.shop/success',
+            cancel_url: 'http://shoemart.shop/failed'
           },
           transactions: [{
             item_list: {

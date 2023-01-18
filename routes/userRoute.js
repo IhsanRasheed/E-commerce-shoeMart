@@ -20,6 +20,9 @@ router.post('/otpVerification', session.isLogout, signup.otpVerification)
 router.get('/login', session.isLogout, login.loginPage)
 router.post('/login', login.userVerfication)
 
+// logout
+router.get('/logout', session.isLogin, login.logout)
+
 // Home
 router.get('/', user.home)
 

@@ -150,5 +150,12 @@
         </div><!-- End .checkout -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+<script>
+    $("select#cars option").each(function(){
+var text = $(this).text();
+var truncated = text.substring(0, 30) + "..."; // truncate text to 30 characters
+$(this).text(truncated);
+});
+</script>
 
 <%-include('../layouts/user-footer.ejs') %> r

@@ -17,6 +17,9 @@ router.get('/login', adminSession.isLogout, admin.login)
 router.post('/login', adminSession.isLogout, admin.adminVerification)
 router.get('/home', adminSession.isLogin, admin.adminHome)
 
+// logout
+router.get('/logout', adminSession.isLogin, admin.logout)
+
 // User side
 router.get('/user', adminSession.isLogin, user.management)
 router.get('/user/block', adminSession.isLogin, user.block)

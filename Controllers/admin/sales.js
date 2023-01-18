@@ -31,18 +31,20 @@ const postPDFData = async (req, res) => {
       acc = acc + curr.totalAmount
       return acc
     }, 0)
-    // const data = {
-    //   orderData,
-    //   total,
-    //   dateFrom,
-    //   dateto
-    // }
+
     res.render('admin/pdfDownload', {
       orderData,
       total,
       dateFrom,
       dateto
     })
+
+    // const data = {
+    //   orderData,
+    //   total,
+    //   dateFrom,
+    //   dateto
+    // }
     // const option = {
     //   format: 'A4',
     //   border: '20px'

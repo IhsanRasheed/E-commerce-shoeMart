@@ -9,6 +9,14 @@ const login = (req, res) => {
   res.render('admin/adminLogin', req.query)
 }
 
+const logout = async (req, res) => {
+  try {
+    req.session.destroy()
+    res.redirect('/admin/login')
+  } catch (error) {
+    console.log(error)
+  }
+}
 const adminVerification = async (req, res) => {
   try {
     const email = req.body.email
@@ -54,6 +62,7 @@ const adminHome = async (req, res) => {
 
 module.exports = {
   login,
+  logout,
   adminVerification,
   adminHome
 }

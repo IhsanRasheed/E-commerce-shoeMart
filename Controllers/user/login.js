@@ -36,8 +36,17 @@ const userVerfication = async (req, res) => {
   }
 }
 
+const logout = async (req, res) => {
+  try {
+    req.session.destroy()
+    res.redirect('/login')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   loginPage,
-  userVerfication
-
+  userVerfication,
+  logout
 }
