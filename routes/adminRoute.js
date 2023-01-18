@@ -10,8 +10,8 @@ const product = require('../Controllers/admin/product')
 const order = require('../Controllers/admin/order')
 const coupon = require('../Controllers/admin/coupon')
 const banner = require('../Controllers/admin/banner')
-const sales = require('../Controllers/admin/sales'
-)
+const sales = require('../Controllers/admin/sales')
+
 // Admin side
 router.get('/login', adminSession.isLogout, admin.login)
 router.post('/login', adminSession.isLogout, admin.adminVerification)
@@ -38,6 +38,7 @@ router.post('/product/edit', adminSession.isLogin, upload.single('image'), produ
 // Orders
 router.get('/order', adminSession.isLogin, order.management)
 router.post('/order', adminSession.isLogin, order.update)
+router.get('/view', adminSession.isLogin, order.viewOrder)
 
 // Coupon
 router.get('/coupon', adminSession.isLogin, coupon.management)

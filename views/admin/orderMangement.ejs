@@ -103,11 +103,13 @@
         </div>
         <div id="layoutSidenav_content">
 
-
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-3">Order Management</h1>
-                   
+                    <h1 class="mt-4">Order Management</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active"></li>
+                    </ol>
+
 
   <div class="card mb-4">
     <div class="card-header">
@@ -124,9 +126,10 @@
                     <th>Order Date</th>
                     <th>Name</th>                  
                     <th>Total Amount</th>
-                    <th>Payment Method</th>              
+                    <th>Payment Method</th>
                     <th>Order Status</th>
-
+                    <th>View Order</th>
+                   
                 </tr>
             </thead>
             <tfoot>
@@ -136,7 +139,7 @@
                     <th>Total Amount</th>
                     <th>Payment Method</th>
                     <th>Order Status</th>
-               
+                    <th>View Order</th>
                    
                 </tr>
             </tfoot>
@@ -144,16 +147,17 @@
                 
                 <% orders.forEach((data)=>{ %>
               <tr>
-                 
-                    <%let date = Date.now(data.orderDate)%>
-                    <%const dt = new Date(date)%>
-                    <%const todate = dt.toLocaleDateString();%>
-                    <td><%=todate%></td>
-
-                <td>  <%=data.name%>    </td>
-                <td>  <%=data.totalAmount%>    </td>
+                <% let date = data.orderDate %>
+                <% const format = new Date(date  ); %>
+                <% const todate = format.toLocaleDateString(); %>
+                <td><%=todate %></td>
+                
+                <td> <%=data.name%>    </td>
+                <td>$<%=data.totalAmount%>    </td>
                 <td>   <%=data.paymentMethod%> </td>
-
+                                
+                
+               
                 <td>  <form action="/admin/order" method="post" >  
                     <select name="orderstatus" id="" class="rounded-3">
                         <% if (data.orderStatus !== 'data.orderStatus') { %>
@@ -170,20 +174,37 @@
                     <option value="delivered">delivered</option>
                     <% } %>
                     <% if (data.orderStatus !== 'cancelled') { %>
-                    <option value="cancelled">cancelled</option>'[
-                    '
+                    <option value="cancelled">cancelled</option>
                     <% } %>
                     <% if (data.orderStatus !== 'refunded') { %>
                     <option value="refunded">refunded</option>
                     <% } %>
                 </select>
                  <input type="text" value="<%=data._id%>" name="orderid" hidden>
-                 <button type="submit" class="rounded-3 border-0 btn-primary" onclick="return confirm('Are you sure to update the order')" >Update</button>   
+                 <button type="submit" class="rounded-3 border-0 btn-primary">Update</button>   
                 </form>
             
 
                     </td>
-                    
+                    <td>  <a href="/admin/view?id=<%= data._id %>">
+                        <button type="button" class="btn btn-outline-none">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="fa fa-file"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"
+                            />
+                          </svg>
+                          </button
+                      ></a></td>
+
+                   
+               
               </tr>
               <%})%>
             </tbody>
@@ -194,7 +215,6 @@
 
                 </div>
             </main>
-
 
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
