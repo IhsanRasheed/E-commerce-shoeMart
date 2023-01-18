@@ -52,7 +52,7 @@ const userCart = async (req, res) => {
       acc = acc + curr.total
       return acc
     }, 0)
-    // console.log(cartItems)
+
     res.render('../views/user/cart.ejs', {
       user,
       brands,
@@ -62,6 +62,7 @@ const userCart = async (req, res) => {
     })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -116,6 +117,7 @@ const addtocart = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -136,6 +138,7 @@ const productQtyAdd = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -160,6 +163,7 @@ const productQtySub = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -174,6 +178,7 @@ const cartDelete = async (req, res) => {
     res.redirect('/cart')
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -219,6 +224,7 @@ const userWishlist = async (req, res) => {
     res.render('user/wishlist', { user, brands, categories, wishList })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -258,6 +264,7 @@ const addWishlist = async (req, res) => {
     // res.redirect('/wishlist')
   } catch (error) {
     console.log('addtowishlist error ' + error)
+    res.redirect('/404')
   }
 }
 
@@ -271,80 +278,91 @@ const wishDelete = async (req, res) => {
     res.json({ success: true })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
 const checkOut = async (req, res) => {
   try {
-    const cartItems = await cartModel.aggregate([
-      { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
-      { $unwind: '$cartItem' },
-      {
-        $project: {
-          productId: '$cartItem.productId',
-          qty: '$cartItem.qty'
-        }
-      },
-      {
-        $lookup: {
-          from: 'products',
-          localField: 'productId',
-          foreignField: '_id',
-          as: 'productDetails'
-        }
-      },
-      { $unwind: '$productDetails' },
-      {
-        $project: {
-          name: '$productDetails.name',
-          price: '$productDetails.price',
-          // image: "$productDetails.image",
-          qty: '$qty',
-          id: '$productDetails._id',
-          userId: '$userId'
-        }
-      },
-      {
-        $addFields: {
-          total: { $multiply: ['$price', '$qty'] }
-        }
+    const cartCheck = await cartModel.findOne({ userId: req.session.user })
+    if (cartCheck != null) {
+      if (cartCheck.cartItem.length !== 0) {
+        const cartItems = await cartModel.aggregate([
+          { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
+          { $unwind: '$cartItem' },
+          {
+            $project: {
+              productId: '$cartItem.productId',
+              qty: '$cartItem.qty'
+            }
+          },
+          {
+            $lookup: {
+              from: 'products',
+              localField: 'productId',
+              foreignField: '_id',
+              as: 'productDetails'
+            }
+          },
+          { $unwind: '$productDetails' },
+          {
+            $project: {
+              name: '$productDetails.name',
+              price: '$productDetails.price',
+              // image: "$productDetails.image",
+              qty: '$qty',
+              id: '$productDetails._id',
+              userId: '$userId'
+            }
+          },
+          {
+            $addFields: {
+              total: { $multiply: ['$price', '$qty'] }
+            }
+          }
+        ])
+        const user = await userModel.findOne({ _id: req.session.user })
+        const brands = await productModel.distinct('brand')
+        const categories = await categoryModel.find({ status: true })
+        const address = await userModel.aggregate([
+          { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
+          { $unwind: '$address' },
+          {
+            $project: {
+              name: '$address.name',
+              addressline1: '$address.addressline1',
+              addressline2: '$address.addressline2',
+              district: '$address.distict',
+              state: '$address.state',
+              country: '$address.country',
+              pin: '$address.pin',
+              mobile: '$address.mobile',
+              id: '$address._id'
+            }
+          }
+        ])
+        const subtotal = cartItems.reduce(function (acc, curr) {
+          acc = acc + curr.total
+          return acc
+        }, 0)
+        // console.log(address);
+        res.render('../views/user/checkout.ejs', {
+          user,
+          brands,
+          categories,
+          address,
+          cartItems,
+          subtotal
+        })
+      } else {
+        res.redirect('/')
       }
-    ])
-    const user = await userModel.findOne({ _id: req.session.user })
-    const brands = await productModel.distinct('brand')
-    const categories = await categoryModel.find({ status: true })
-    const address = await userModel.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
-      { $unwind: '$address' },
-      {
-        $project: {
-          name: '$address.name',
-          addressline1: '$address.addressline1',
-          addressline2: '$address.addressline2',
-          district: '$address.distict',
-          state: '$address.state',
-          country: '$address.country',
-          pin: '$address.pin',
-          mobile: '$address.mobile',
-          id: '$address._id'
-        }
-      }
-    ])
-    const subtotal = cartItems.reduce(function (acc, curr) {
-      acc = acc + curr.total
-      return acc
-    }, 0)
-    // console.log(address);
-    res.render('../views/user/checkout.ejs', {
-      user,
-      brands,
-      categories,
-      address,
-      cartItems,
-      subtotal
-    })
+    } else {
+      res.redirect('/')
+    }
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -360,8 +378,26 @@ const postCheckOut = async (req, res) => {
             productId: '$cartItem.productId',
             quantity: '$cartItem.qty'
           }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'productId',
+            foreignField: '_id',
+            as: 'productDetails'
+          }
+        },
+        { $unwind: '$productDetails' },
+        {
+          $project: {
+            _id: 0,
+            productId: '$productId',
+            quantity: '$quantity',
+            price: '$productDetails.price'
+          }
         }
       ])
+
       const cartItems = await cartModel.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: '$cartItem' },
@@ -443,6 +479,11 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'COD'
         })
         await orderDetails.save()
+        await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
+        const productDetails = productData
+        for (let i = 0; i < productDetails.length; i++) {
+          await productModel.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+        }
         res.redirect('/success')
       }
     }
@@ -513,9 +554,12 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'online Payment'
         })
         await orderDetails.save()
-
-        var totals = subtotal
-        const total = parseInt(totals)
+        await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
+        const productDetails = productData
+        for (let i = 0; i < productDetails.length; i++) {
+          await productModel.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+        }
+        const total = parseInt(subtotal)
         const create_payment_json = {
           intent: 'sale',
           payer: {
@@ -574,8 +618,12 @@ const postCheckOut = async (req, res) => {
           paymentMethod: 'COD'
         })
         await orderDetails.save()
-
-        var totals = subtotal * 0.012
+        await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
+        const productDetails = productData
+        for (let i = 0; i < productDetails.length; i++) {
+          await productModel.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+        }
+        const totals = subtotal * 0.012
         const total = parseInt(totals)
         const create_payment_json = {
           intent: 'sale',
@@ -583,8 +631,8 @@ const postCheckOut = async (req, res) => {
             payment_method: 'paypal'
           },
           redirect_urls: {
-            return_url: 'http://localhost:4000/success',
-            cancel_url: 'http://localhost:4000/failed'
+            return_url: 'http://shoemart.shop/success',
+            cancel_url: 'http://shoemart.shop/failed'
           },
           transactions: [{
             item_list: {
@@ -618,6 +666,7 @@ const postCheckOut = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -655,6 +704,7 @@ const setAddressCheckout = async (req, res) => {
     res.json({ data: address })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 

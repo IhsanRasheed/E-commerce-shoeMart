@@ -13,6 +13,7 @@ const orderPage = async (req, res) => {
     res.render('user/orderPage', { user, categories, brands, order })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -23,6 +24,7 @@ const orderCancel = async (req, res) => {
     await orderModel.updateOne({ _id: id }, { $set: { orderStatus: 'cancelled' } })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -86,6 +88,7 @@ const orderDetails = async (req, res) => {
     res.render('user/orderHistory', { user, categories, brands, productData })
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 

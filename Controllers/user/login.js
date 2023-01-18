@@ -20,7 +20,6 @@ const userVerfication = async (req, res) => {
         const hashedCheck = await bcrypt.compare(inputPassword, userFind.password)
         if (hashedCheck === true) {
           req.session.user = userFind._id
-          //  console.log(req.session.user)
           res.redirect('/')
         } else {
           res.redirect('/user/login?wrong=Wrong Email or Password')
@@ -33,6 +32,7 @@ const userVerfication = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -42,6 +42,7 @@ const logout = async (req, res) => {
     res.redirect('/login')
   } catch (error) {
     console.log(error)
+    res.redirect('/404')
   }
 }
 

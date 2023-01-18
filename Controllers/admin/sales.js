@@ -49,8 +49,8 @@ const postPDFData = async (req, res) => {
     //   format: 'A4',
     //   border: '20px'
     // }
-    // const filePath = path.resolve(__dirname, 'pdfDownload.ejs')
-    // const htmlString = fs.readFileSync(filePath).toString()
+    // const filePathName = path.resolve(__dirname, '../../views/admin/pdfDownload.ejs')
+    // const htmlString = fs.readFileSync(filePathName).toString()
     // const ejsData = ejs.render(htmlString, data)
     // pdf.create(ejsData, option).toFile('sales_report.pdf', (err, file) => {
     //   if (err) {
