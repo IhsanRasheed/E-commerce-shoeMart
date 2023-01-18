@@ -615,7 +615,7 @@ const postCheckOut = async (req, res) => {
           couponUsed: req.body.couponid,
           subTotal: subtotal,
           totalAmount: req.body.total,
-          paymentMethod: 'COD'
+          paymentMethod: 'online Payment'
         })
         await orderDetails.save()
         await cartModel.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
@@ -623,8 +623,7 @@ const postCheckOut = async (req, res) => {
         for (let i = 0; i < productDetails.length; i++) {
           await productModel.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
         }
-        const totals = subtotal * 0.012
-        const total = parseInt(totals)
+        const total = parseInt(subtotal)
         const create_payment_json = {
           intent: 'sale',
           payer: {
