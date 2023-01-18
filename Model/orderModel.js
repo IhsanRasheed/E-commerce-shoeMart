@@ -42,10 +42,6 @@ const orderSchema = mongoose.Schema({
   paymentMethod: {
     type: String
   },
-  paymentStatus: {
-    type: String,
-    default: 'not paid'
-  },
   orderDate: {
     type: Date,
     default: Date.now()
