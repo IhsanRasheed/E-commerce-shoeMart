@@ -30,7 +30,7 @@
                                     </figure><!-- End .product-main-image -->
 
                                     <div id="product-zoom-gallery" class="product-image-gallery">
-                                        <a class="product-gallery-item active" href="#" data-image="/Public/admin/products/<%=productData.image[0].filename%>" data-zoom-image="/Public/admin/products/<%=productData.image[0].filename%>">
+                                        <a class="product-gallery-item active" href="/Public/admin/products/<%=productData.image[0].filename%>" data-image="/Public/admin/products/<%=productData.image[0].filename%>" data-zoom-image="/Public/admin/products/<%=productData.image[0].filename%>">
                                             <img src="/Public/admin/products/<%=productData.image[0].filename%>" >
                                         </a>
 
@@ -54,12 +54,7 @@
                             <div class="product-details product-details-centered">
                                 <h1 class="product-title"><%=productData.name%></h1><!-- End .product-title -->
 
-                                <!-- <div class="ratings-container">
-                                    <div class="ratings"> -->
-                                        <!-- <div class="ratings-val" style="width: 80%;"></div>End .ratings-val -->
-                                    <!-- </div>End .ratings -->
-                                    <!-- <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a> -->
-                                <!-- </div>End .rating-container -->
+                                
 
                                 <div class="product-price">
                                     $<%=productData.price%>

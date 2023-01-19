@@ -15,7 +15,6 @@ const management = async (req, res) => {
         }
       }
     ])
-    console.log(products)
     res.render('admin/productManagement.ejs', { products, categories })
   } catch (error) {
     console.log(error)
