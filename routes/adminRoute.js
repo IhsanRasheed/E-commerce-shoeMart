@@ -56,5 +56,6 @@ router.get('/banner/block', adminSession.isLogin, banner.block)
 // Sales
 router.get('/sales', adminSession.isLogin, sales.salesPage)
 router.post('/sales', adminSession.isLogin, sales.postPDFData)
+router.get('/csv_download', adminSession.isLogin, sales.csvDownload)
 
 module.exports = router
