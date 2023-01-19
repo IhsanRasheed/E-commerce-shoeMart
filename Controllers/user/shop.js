@@ -497,6 +497,23 @@ const postCheckOut = async (req, res) => {
             productId: '$cartItem.productId',
             quantity: '$cartItem.qty'
           }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'productId',
+            foreignField: '_id',
+            as: 'productDetails'
+          }
+        },
+        { $unwind: '$productDetails' },
+        {
+          $project: {
+            _id: 0,
+            productId: '$productId',
+            quantity: '$quantity',
+            price: '$productDetails.price'
+          }
         }
       ])
 
