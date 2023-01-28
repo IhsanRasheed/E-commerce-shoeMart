@@ -31,7 +31,7 @@ const search = async (req, res) => {
     const categories = await categoryModel.find({ status: true })
     const brands = await productModel.distinct('brand')
     const key = req.body.search
-    console.log(key)
+    // console.log(key)
     const products = await productModel.find({
       $or: [
         { name: new RegExp(key, 'i') }
